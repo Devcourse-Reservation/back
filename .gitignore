@@ -1,0 +1,5 @@
+# Node.js 의존성
+node_modules/
+
+# 환경변수 파일
+.env
