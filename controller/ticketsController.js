@@ -1,17 +1,21 @@
 const db = require("../models");
 const { StatusCodes } = require("http-status-codes");
 
-const getTicketsByUserId = async (req, res) => {
-  const { userId } = req.body; // 로그인 API 구현되면 변경될 예정
-
+const getTicketByTicketId = async (req, res) => {
+  let { ticketId } = req.params;
+  const { userId, flightId } = req.body;
+  ticketId = parseInt(ticketId);
   try {
-    const tickets = await db.Tickets.findAll({
-      where: { user_id: userId },
+    const ticket = await db.Tickets.findOne({
+      where: { id: ticketId },
       include: [
         {
+          model: db.Seats,
+          attributes: ["status", "class"],
+        },
+        {
           model: db.Flights,
-          attributes: ["departureTime"],
-
+          attributes: ["departureTime", "arrivalTime", "airline"],
           include: [
             {
               model: db.Airports,
@@ -25,15 +29,31 @@ const getTicketsByUserId = async (req, res) => {
             },
           ],
         },
+        {
+          model: db.Payments,
+          attributes: ["status"],
+        },
       ],
     });
-    if (tickets.length === 0) {
-      return res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ message: "Tickets Not found" });
-    }
 
-    return res.status(StatusCodes.OK).json(tickets);
+    if (!ticket)
+      return res.status(StatusCodes.NOT_FOUND).json({
+        error: "Ticket Not found",
+      });
+
+    const passengerCount = await db.Tickets.count({
+      where: {
+        userId: userId,
+        flightId: flightId,
+      },
+    });
+
+    if (passengerCount === 0)
+      return res.status(StatusCodes.NOT_FOUND).json({
+        error: "userId or flightId is missing",
+      });
+
+    return res.status(StatusCodes.OK).json({ ticket, passengerCount });
   } catch (error) {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       error: "Internal Server Error",
@@ -41,4 +61,4 @@ const getTicketsByUserId = async (req, res) => {
     });
   }
 };
-module.exports = { getTicketsByUserId };
+module.exports = { getTicketByTicketId };

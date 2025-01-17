@@ -16,16 +16,18 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      phone_number: {
+      phoneNumber: {
         type: DataTypes.STRING,
+        field: "phone_number",
         allowNull: true,
       },
       provider: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      user_type: {
+      userType: {
         type: DataTypes.STRING,
+        field: "user_type",
         allowNull: false,
       },
       created_at: {
@@ -42,5 +44,11 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: false,
     }
   );
+  Users.associate = (models) => {
+    Users.hasMany(models.Payments, {
+      foreignKey: "userId",
+      sourceKey: "id",
+    });
+  };
   return Users;
 };

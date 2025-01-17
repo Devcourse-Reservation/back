@@ -32,6 +32,11 @@ module.exports = (sequelize, DataTypes) => {
         field: "reservation_number",
         unique: true,
       },
+      ticketType: {
+        type: DataTypes.STRING,
+        field: "ticket_type",
+        allowNull: false,
+      },
       reservedAt: {
         type: DataTypes.DATE,
         field: "reserved_at",
@@ -61,6 +66,16 @@ module.exports = (sequelize, DataTypes) => {
     Tickets.belongsTo(models.Flights, {
       foreignKey: "flightId",
       targetKey: "id",
+    });
+
+    Tickets.belongsTo(models.Seats, {
+      foreignKey: "seatId",
+      targetKey: "id",
+    });
+
+    Tickets.hasOne(models.Payments, {
+      foreignKey: "ticketId",
+      sourceKey: "id",
     });
   };
   return Tickets;
