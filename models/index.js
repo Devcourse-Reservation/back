@@ -12,6 +12,10 @@ db.Users = require("./users")(sequelize, DataTypes);
 db.Flights = require("./flights")(sequelize, DataTypes);
 db.Airports = require("./airports")(sequelize, DataTypes);
 
+db.Tickets.associate(db);
+db.Flights.associate(db);
+db.Airports.associate(db);
+
 sequelize
   .sync({ force: false })
   .then(() => {

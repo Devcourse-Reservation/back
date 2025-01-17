@@ -1,58 +1,44 @@
-const sequelize = require("../config/db");
 const db = require("../models");
-const { SeatStatus, TicketStatus } = require("../common/StatusEnums");
 const { StatusCodes } = require("http-status-codes");
-const generateRandomTicketNumber = require("../utils/generateRandomTicketNumber");
 
-const postTickets = async (req, res) => {
-  const { userId, flightId, seatId, reservedAt } = req.body;
-
-  let dbTransaction;
+const getTicketsByUserId = async (req, res) => {
+  const { userId } = req.body; // 로그인 API 구현되면 변경될 예정
 
   try {
-    dbTransaction = await sequelize.transaction();
-    const seats = await db.Seats.findOne({
-      where: {
-        id: seatId,
-        flight_id: flightId,
-        status: SeatStatus.Available,
-      },
-      lock: true,
-      transaction: dbTransaction,
+    const tickets = await db.Tickets.findAll({
+      where: { user_id: userId },
+      include: [
+        {
+          model: db.Flights,
+          attributes: ["departureTime"],
+
+          include: [
+            {
+              model: db.Airports,
+              as: "departureAirport",
+              attributes: ["name", "code"],
+            },
+            {
+              model: db.Airports,
+              as: "arrivalAirport",
+              attributes: ["name", "code"],
+            },
+          ],
+        },
+      ],
     });
-
-    if (!seats) {
-      throw new Error("Seat already reserved.");
+    if (tickets.length === 0) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "Tickets Not found" });
     }
 
-    seats.status = SeatStatus.Reserved;
-    await seats.save({ transaction: dbTransaction });
-
-    const reservationNumber = generateRandomTicketNumber();
-
-    const ticket = await db.Tickets.create(
-      {
-        userId,
-        flightId,
-        seatId,
-        status: TicketStatus.Pending,
-        reservationNumber,
-        reservedAt,
-      },
-      { transaction: dbTransaction }
-    );
-
-    await dbTransaction.commit();
-    return res.status(StatusCodes.CREATED).json(ticket);
+    return res.status(StatusCodes.OK).json(tickets);
   } catch (error) {
-    if (dbTransaction) {
-      await dbTransaction.rollback();
-    }
-
-    console.error("Error creating ticket:", error.message);
-    return res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ message: "Internal Server Error", error: error.message });
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      error: "Internal Server Error",
+      details: error.message,
+    });
   }
 };
-module.exports = { postTickets };
+module.exports = { getTicketsByUserId };

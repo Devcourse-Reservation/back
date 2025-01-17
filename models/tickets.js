@@ -39,6 +39,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       cancelledAt: {
         type: DataTypes.DATE,
+        field: "cancelled_at",
         allowNull: true,
       },
       created_at: {
@@ -55,5 +56,12 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: false,
     }
   );
+
+  Tickets.associate = (models) => {
+    Tickets.belongsTo(models.Flights, {
+      foreignKey: "flightId",
+      targetKey: "id",
+    });
+  };
   return Tickets;
 };
