@@ -5,12 +5,14 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true,
     },
-    flight_id: {
+    flightId: {
       type: DataTypes.INTEGER,
+      field: "flight_id",
       allowNull: false,
     },
-    seat_number: {
+    seatNumber: {
       type: DataTypes.STRING,
+      field: "seat_number",
       allowNull: false,
     },
     class: {
