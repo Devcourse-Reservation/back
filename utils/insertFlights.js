@@ -1,80 +1,59 @@
-const Flight = require('../models/Flight'); // Flight 모델 가져오기
+const Flights = require('../models/Flight');
 
-(async () => {
+const insertFlights = async () => {
   try {
-    const flights = [
+    await Flights.bulkCreate([
       {
-        airline: 'Korean Air',
-        origin: 'ICN',
-        destination: 'JFK',
-        departureTime: '2025-01-20 10:00:00',
-        arrivalTime: '2025-01-20 14:00:00',
-        price: 1200.0,
-        duration: '14h 0m',
-        seatsAvailable: 50,
-        class: 'economy',
+        flightNumber: 'AA101',
+        airline: 'American Airlines',
+        status: 'Scheduled',
+        departureAirportId: 1, // LAX
+        arrivalAirportId: 2, // JFK
+        departureTime: '2025-01-20 08:00:00',
+        arrivalTime: '2025-01-20 16:00:00',
       },
       {
-        airline: 'Asiana Airlines',
-        origin: 'ICN',
-        destination: 'LAX',
-        departureTime: '2025-01-21 12:00:00',
-        arrivalTime: '2025-01-21 16:00:00',
-        price: 1100.0,
-        duration: '11h 0m',
-        seatsAvailable: 30,
-        class: 'business',
-      },
-      {
+        flightNumber: 'DL202',
         airline: 'Delta Airlines',
-        origin: 'ICN',
-        destination: 'ORD',
-        departureTime: '2025-01-22 08:00:00',
-        arrivalTime: '2025-01-22 12:00:00',
-        price: 900.0,
-        duration: '13h 0m',
-        seatsAvailable: 45,
-        class: 'economy',
+        status: 'Scheduled',
+        departureAirportId: 2, // JFK
+        arrivalAirportId: 3, // SFO
+        departureTime: '2025-01-21 09:00:00',
+        arrivalTime: '2025-01-21 12:30:00',
       },
-      // 돌아오는 항공편
-    {
-      airline: 'Korean Air',
-      origin: 'JFK',
-      destination: 'ICN',
-      departureTime: '2025-01-25 15:00:00',
-      arrivalTime: '2025-01-26 19:00:00',
-      price: 1250.0,
-      duration: '14h 0m',
-      seatsAvailable: 40,
-      class: 'economy',
-    },
-    {
-      airline: 'Asiana Airlines',
-      origin: 'LAX',
-      destination: 'ICN',
-      departureTime: '2025-01-26 14:00:00',
-      arrivalTime: '2025-01-27 18:00:00',
-      price: 1150.0,
-      duration: '11h 0m',
-      seatsAvailable: 25,
-      class: 'business',
-    },
-    {
-      airline: 'Delta Airlines',
-      origin: 'ORD',
-      destination: 'ICN',
-      departureTime: '2025-01-27 09:00:00',
-      arrivalTime: '2025-01-28 13:00:00',
-      price: 950.0,
-      duration: '13h 0m',
-      seatsAvailable: 35,
-      class: 'economy',
-    },
-  ];
+      {
+        flightNumber: 'UA303',
+        airline: 'United Airlines',
+        status: 'Delayed',
+        departureAirportId: 3, // SFO
+        arrivalAirportId: 4, // ORD
+        departureTime: '2025-01-22 14:00:00',
+        arrivalTime: '2025-01-22 18:00:00',
+      },
+      {
+        flightNumber: 'KE404',
+        airline: 'Korean Air',
+        status: 'Scheduled',
+        departureAirportId: 5, // ICN
+        arrivalAirportId: 1, // LAX
+        departureTime: '2025-01-23 11:00:00',
+        arrivalTime: '2025-01-23 20:00:00',
+      },
+      {
+        flightNumber: 'AA505',
+        airline: 'American Airlines',
+        status: 'Cancelled',
+        departureAirportId: 4, // ORD
+        arrivalAirportId: 5, // ICN
+        departureTime: '2025-01-24 18:00:00',
+        arrivalTime: '2025-01-25 08:00:00',
+      },
+    ]);
 
-    await Flight.bulkCreate(flights);
-    console.log('Flights inserted successfully.');
+    console.log('Flights inserted successfully!');
   } catch (error) {
     console.error('Error inserting flights:', error);
   }
-})();
+};
+
+insertFlights();

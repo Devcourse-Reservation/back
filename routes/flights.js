@@ -4,10 +4,10 @@ router.use(express.json());
 
 const {
     searchFlights,
-    //flightDetail,
+    getFlightDetails,
 } = require('../controllers/flightController');
 
 router.post('/search', searchFlights);
-//router.get('/:id', flightDetail);
+router.get('/:id', getFlightDetails);
 
 module.exports = router;

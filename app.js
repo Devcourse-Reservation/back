@@ -4,12 +4,14 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var sequelize = require('./config/db');
+const dotenv = require("dotenv");
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var flightRouter = require('./routes/flights');
 
 var app = express();
+dotenv.config({ path: "back/.env" });
 const PORT = process.env.PORT || 3000;
 
 // view engine setup
@@ -28,11 +30,9 @@ app.use('/flights', flightRouter);
 
 const Flight = require('./models/Flight');
 
-// 데이터베이스 연결 테스트 및 모델 동기화
 sequelize.authenticate()
   .then(() => {
     console.log('MySQL connected successfully');
-    // 모델 동기화 (테이블이 없다면 생성)
     return sequelize.sync();
   })
   .then(() => {
@@ -46,7 +46,6 @@ app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
-// catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });
