@@ -35,12 +35,12 @@ const searchFlights = async (req, res) => {
         {
           model: Airport,
           as: 'departureAirport', 
-          attributes: ['name', 'code', 'city', 'country'],
+          attributes: ['code'],
         },
         {
           model: Airport,
           as: 'arrivalAirport', 
-          attributes: ['name', 'code', 'city', 'country'],
+          attributes: ['code'],
         },
       ],
       order: [['departureTime', 'ASC']],
@@ -80,10 +80,14 @@ const searchFlights = async (req, res) => {
 const getFlightDetails = async (req, res) => {
   try {
     const { flightId } = req.params; // URL 파라미터에서 flightId 추출
+    console.log('flightId:', flightId); // flightId가 제대로 출력되는지 확인
 
+    if (!flightId) {
+      return res.status(400).json({ error: 'flightId가 누락되었습니다.' });
+    }
     // 항공편 조회
     const flight = await Flight.findOne({
-      where: { flightNumber: flightId }, // flightId로 항공편 조회
+      where: { id : flightId }, // flightId로 항공편 조회
       include: [
         {
           model: Airport,

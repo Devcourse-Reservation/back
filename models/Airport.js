@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
 const Flight = require('./Flight');
 
-const Airport = sequelize.define('Airports', {
+const Airport = sequelize.define('Airport', {
   airportId: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -40,15 +40,18 @@ const Airport = sequelize.define('Airports', {
   timestamps: false,     
 });
 
+// Airport.js
 Airport.associate = (models) => {
+  // 출발 공항에서 출발하는 항공편
   Airport.hasMany(models.Flight, {
-    foreignKey: 'departureAirportId',
-    as: 'departureFlights',
+    foreignKey: 'departureAirportId', // 외래 키
+    as: 'departureFlights',           // 관계 이름
   });
 
+  // 도착 공항으로 도착하는 항공편
   Airport.hasMany(models.Flight, {
-    foreignKey: 'arrivalAirportId',
-    as: 'arrivalFlights',
+    foreignKey: 'arrivalAirportId', // 외래 키
+    as: 'arrivalFlights',           // 관계 이름
   });
 };
 

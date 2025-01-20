@@ -3,6 +3,7 @@ const Flights = require('../models/Flight');
 const insertFlights = async () => {
   try {
     await Flights.bulkCreate([
+      // 기존 항공편
       {
         flightNumber: 'AA101',
         airline: 'American Airlines',
@@ -47,6 +48,53 @@ const insertFlights = async () => {
         arrivalAirportId: 5, // ICN
         departureTime: '2025-01-24 18:00:00',
         arrivalTime: '2025-01-25 08:00:00',
+      },
+      
+      // 돌아오는 항공편
+      {
+        flightNumber: 'AA102',
+        airline: 'American Airlines',
+        status: 'Scheduled',
+        departureAirportId: 2, // JFK
+        arrivalAirportId: 1, // LAX
+        departureTime: '2025-01-25 18:00:00',
+        arrivalTime: '2025-01-25 22:00:00',
+      },
+      {
+        flightNumber: 'DL203',
+        airline: 'Delta Airlines',
+        status: 'Scheduled',
+        departureAirportId: 3, // SFO
+        arrivalAirportId: 2, // JFK
+        departureTime: '2025-01-26 14:00:00',
+        arrivalTime: '2025-01-26 17:30:00',
+      },
+      {
+        flightNumber: 'UA304',
+        airline: 'United Airlines',
+        status: 'Delayed',
+        departureAirportId: 4, // ORD
+        arrivalAirportId: 3, // SFO
+        departureTime: '2025-01-27 19:00:00',
+        arrivalTime: '2025-01-27 23:00:00',
+      },
+      {
+        flightNumber: 'KE405',
+        airline: 'Korean Air',
+        status: 'Scheduled',
+        departureAirportId: 1, // LAX
+        arrivalAirportId: 5, // ICN
+        departureTime: '2025-01-27 21:00:00',
+        arrivalTime: '2025-01-28 05:00:00',
+      },
+      {
+        flightNumber: 'AA506',
+        airline: 'American Airlines',
+        status: 'Cancelled',
+        departureAirportId: 5, // ICN
+        arrivalAirportId: 4, // ORD
+        departureTime: '2025-01-25 09:00:00',
+        arrivalTime: '2025-01-25 21:00:00',
       },
     ]);
 

@@ -8,6 +8,6 @@ const {
 } = require('../controllers/flightController');
 
 router.post('/search', searchFlights);
-router.get('/:id', getFlightDetails);
+router.get('/:flightId', getFlightDetails);
 
 module.exports = router;
