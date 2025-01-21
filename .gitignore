@@ -1,0 +1,15 @@
+# Node modules 폴더 제외
+node_modules/
+
+#인텔리제이 설정파일 제외
+.idea
+
+# .env 파일 제외
+.env
+
+# 로그 파일들 제외
+*.log
+
+# 운영체제별 파일 제외 (윈도우와 맥에서 생성되는 시스템 파일들)
+.DS_Store
+Thumbs.db
