@@ -4,7 +4,7 @@ const Flight = require('./Flight');
 
 const Airport = sequelize.define('Airport', {
   airportId: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.BIGINT,
     primaryKey: true,
     autoIncrement: true,
   },

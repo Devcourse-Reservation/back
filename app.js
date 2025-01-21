@@ -29,7 +29,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 //app.use('/', indexRouter);
-//app.use('/users', usersRouter);å
+//app.use('/users', usersRouter);
 app.use('/flights', flightRouter);
 
 const Flight = require('./models/Flight');
