@@ -5,13 +5,17 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var sequelize = require('./config/db');
 const dotenv = require("dotenv");
+dotenv.config({ path: "back/.env" });
+
+var app = express();
+
 
 //var indexRouter = require('./routes/index');
 //var usersRouter = require('./routes/users');
 var flightRouter = require('./routes/flights');
+var authRouter = require('./routes/authRoute');
 
-var app = express();
-dotenv.config({ path: "back/.env" });
+
 const PORT = process.env.PORT || 3000;
 
 
@@ -31,8 +35,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 //app.use('/', indexRouter);
 //app.use('/users', usersRouter);
 app.use('/flights', flightRouter);
+app.use('/auth', authRouter);
 
 const Flight = require('./models/Flight');
+
 
 sequelize.authenticate()
   .then(() => {

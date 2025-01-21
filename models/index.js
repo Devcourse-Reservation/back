@@ -11,6 +11,7 @@ db.Airport = require("./Airport");
 
 db.Flight.associate(db);
 db.Airport.associate(db);
+db.User = require("./user")(sequelize, DataTypes);
 
 sequelize
   .sync({ force: false })
