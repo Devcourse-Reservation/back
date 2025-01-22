@@ -1,12 +1,12 @@
 module.exports = (sequelize, DataTypes) => {
   const Seats = sequelize.define("Seats", {
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
       primaryKey: true,
       autoIncrement: true,
     },
     flight_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
       allowNull: false,
     },
     seat_number: {
