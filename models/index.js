@@ -8,9 +8,13 @@ db.sequelize = sequelize;
 
 db.Tickets = require("./tickets")(sequelize, DataTypes);
 db.Seats = require("./seats")(sequelize, DataTypes);
-db.Users = require("./users")(sequelize, DataTypes);
-db.Flights = require("./flights")(sequelize, DataTypes);
-db.Airports = require("./airports")(sequelize, DataTypes);
+
+db.Flight = require("./Flight");
+db.Airport = require("./Airport");
+
+db.Flight.associate(db);
+db.Airport.associate(db);
+db.User = require("./user")(sequelize, DataTypes);
 
 sequelize
   .sync({ force: false })
