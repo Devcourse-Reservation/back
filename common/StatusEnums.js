@@ -15,8 +15,16 @@ const FlightStatus = Object.freeze({
   Cancelled: "Cancelled",
   Delayed: "Delayed",
 });
+
+const PaymentStatus = Object.freeze({
+  Paid: "Paid",
+  Pending: "Pending",
+  Refunded: "Refunded",
+});
+
 module.exports = {
   SeatStatus,
   TicketStatus,
   FlightStatus,
+  PaymentStatus
 };

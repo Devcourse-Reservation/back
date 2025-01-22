@@ -8,14 +8,17 @@ db.sequelize = sequelize;
 
 db.Tickets = require("./tickets")(sequelize, DataTypes);
 db.Seats = require("./seats")(sequelize, DataTypes);
-db.Users = require("./users")(sequelize, DataTypes);
-db.Flights = require("./flights")(sequelize, DataTypes);
-db.Airports = require("./airports")(sequelize, DataTypes);
 db.Payments = require("./payments")(sequelize, DataTypes);
+db.Flight = require("./Flight");
+db.Airport = require("./Airport");
+
+db.Flight.associate(db);
+db.Airport.associate(db);
+db.User = require("./user")(sequelize, DataTypes);
 
 db.Tickets.associate(db);
-db.Flights.associate(db);
-db.Airports.associate(db);
+db.Flight.associate(db);
+db.Airport.associate(db);
 db.Payments.associate(db);
 db.Seats.associate(db);
 
