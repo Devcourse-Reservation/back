@@ -3,17 +3,17 @@ module.exports = (sequelize, DataTypes) => {
     "Payments",
     {
       id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
         primaryKey: true,
         autoIncrement: true,
       },
       userId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
         field: "user_id",
         allowNull: false,
       },
       ticketId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
         field: "ticket_id",
         allowNull: false,
       },

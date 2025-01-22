@@ -3,12 +3,12 @@ module.exports = (sequelize, DataTypes) => {
     "Seats",
     {
       id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
         primaryKey: true,
         autoIncrement: true,
       },
       flightId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
         field: "flight_id",
         allowNull: false,
       },

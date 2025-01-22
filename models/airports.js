@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
     "Airports",
     {
       id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
         primaryKey: true,
         autoIncrement: true,
       },
