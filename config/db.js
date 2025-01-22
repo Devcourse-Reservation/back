@@ -1,6 +1,6 @@
 const { Sequelize } = require("sequelize");
-const dotenv = require("dotenv");
-dotenv.config({ path: "back/config/.env" });
+require("dotenv").config();
+
 
 const sequelize = new Sequelize(
   process.env.DATABASE,
@@ -11,7 +11,8 @@ const sequelize = new Sequelize(
     dialect: "mysql",
     port: process.env.DB_PORT,
     logging: false,
-  }
+
+  },
 );
 
 module.exports = sequelize;

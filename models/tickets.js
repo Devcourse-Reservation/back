@@ -35,6 +35,11 @@ module.exports = (sequelize, DataTypes) => {
       reservedAt: {
         type: DataTypes.DATE,
         field: "reserved_at",
+        allowNull: true,
+      },
+      ticketType: {
+        type: DataTypes.STRING,
+        field: "ticket_type",
         allowNull: false,
       },
       cancelledAt: {
