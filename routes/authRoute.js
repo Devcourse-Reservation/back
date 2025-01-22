@@ -5,7 +5,12 @@ const router = express.Router();
 
 router.use(passport.initialize());
 
-router.get("/google", passport.authenticate("google", { scope: ["email"] }));
+router.get(
+  "/google",
+  passport.authenticate("google", {
+    scope: ["email", "https://www.googleapis.com/auth/userinfo.profile"],
+  }),
+);
 
 router.get(
   "/google/callback",
@@ -16,7 +21,7 @@ router.get(
   createToken,
 );
 
-router.get("/kakao", passport.authenticate("kakao", { scope: ["email"] }));
+router.get("/kakao", passport.authenticate("kakao"));
 
 router.get(
   "/kakao/callback",
@@ -27,7 +32,10 @@ router.get(
   createToken,
 );
 
-router.get("/naver", passport.authenticate("naver", { scope: ["email"] }));
+router.get(
+  "/naver",
+  passport.authenticate("naver", { scope: ["email", "name", "mobile"] }),
+);
 
 router.get(
   "/naver/callback",

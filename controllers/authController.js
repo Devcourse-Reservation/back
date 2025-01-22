@@ -7,7 +7,7 @@ const dotenv = require("dotenv");
 dotenv.config({ path: "back/.env" });
 
 const findOrCreateUser = async (email, provider, phone_number, name) => {
-  const phone = phone_number || ""; 
+  const phone = phone_number || "";
   const userName = name || "";
   try {
     const [user, created] = await User.findOrCreate({
@@ -20,7 +20,7 @@ const findOrCreateUser = async (email, provider, phone_number, name) => {
       },
     });
 
-    return user; 
+    return user;
   } catch (error) {
     console.error("Error in findOrCreateUser:", error);
     throw error;
@@ -35,13 +35,16 @@ const createToken = (req, res) => {
   };
   const options = {
     subject: "user",
-    expiresIn: "3m",
+    expiresIn: "1h",
     issuer: process.env.JWT_ISSUER,
   };
 
   const token = jwt.sign(payload, process.env.JWT_SECRET, options);
-
-  res.cookie("accessToken", token);
+  res.cookie("accessToken", token, {
+    httpOnly: true,
+    sameSite: "strict",
+    secure: true,
+  });
   res.status(StatusCodes.OK).end();
 };
 

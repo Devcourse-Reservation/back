@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const { StatusCodes } = require("http-status-codes");
 
-dotenv.config({ path: "./src/config/.env" });
+dotenv.config({ path: "back/.env" });
 
 const verifyToken = (req, res, next) => {
   let token;

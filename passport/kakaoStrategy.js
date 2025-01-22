@@ -10,8 +10,8 @@ const kakaoStrategy = new KakaoStrategy(
     //clientSecret: process.env.KAKAO_CLIENT_SECRET,  // 선택 사항
     callbackURL: process.env.KAKAO_REDIRECT_URL,
   },
-  async (accessToken, refreshToken, profile, cb) => {
-    const email = profile._json.kakao_account.email; 
+  async (oauthAccessToken, refreshToken, profile, cb) => {
+    const email = profile._json.kakao_account.email;
     const provider = profile.provider;
     const phoneNumber = profile.phone_number;
     const name = profile.username;
