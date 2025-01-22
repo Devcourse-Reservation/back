@@ -11,6 +11,7 @@ var app = express();
 
 var flightRouter = require("./routes/flights");
 var authRouter = require("./routes/authRoute");
+const ticketRoute = require("./routes/tickets");
 
 const PORT = process.env.PORT || 3000;
 
@@ -27,6 +28,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use("/tickets", ticketRoute);
 app.use("/flights", flightRouter);
 app.use("/auth", authRouter);
 

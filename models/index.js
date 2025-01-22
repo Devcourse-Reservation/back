@@ -6,6 +6,9 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
+db.Tickets = require("./tickets")(sequelize, DataTypes);
+db.Seats = require("./seats")(sequelize, DataTypes);
+
 db.Flight = require("./Flight");
 db.Airport = require("./Airport");
 
