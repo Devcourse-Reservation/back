@@ -21,20 +21,24 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      departure_airport_id: {
+      departureAirportId: {
         type: DataTypes.BIGINT,
+        field: "departure_airport_id",
         allowNull: false,
       },
-      arrival_airport_id: {
+      arrivalAirportId: {
         type: DataTypes.BIGINT,
+        field: "arrival_airport_id",
         allowNull: false,
       },
-      departure_time: {
+      departureTime: {
         type: DataTypes.DATE,
+        field: "departure_time",
         allowNull: false,
       },
-      arrival_time: {
+      arrivalTime: {
         type: DataTypes.DATE,
+        field: "arrival_time",
         allowNull: false,
       },
       created_at: {
@@ -60,6 +64,10 @@ module.exports = (sequelize, DataTypes) => {
     Flights.belongsTo(models.Airports, {
       foreignKey: "arrival_airport_id",
       as: "arrivalAirport",
+    });
+    Flights.hasMany(models.Tickets, {
+      foreignKey: "flight_id",
+      sourceKey: "id",
     });
   };
   return Flights;

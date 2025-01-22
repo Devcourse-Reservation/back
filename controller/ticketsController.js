@@ -1,12 +1,51 @@
-const sequelize = require("../config/db");
 const db = require("../models");
-const { SeatStatus, TicketStatus } = require("../common/StatusEnums");
 const { StatusCodes } = require("http-status-codes");
 const {
   generateRandomTicketNumber,
 } = require("../utils/generateRandomTicketNumber");
 const { TicketType } = require("../common/TypeEnums");
 const { validateSeats } = require("../utils/seatValidation");
+
+const getTicketsByUserId = async (req, res) => {
+  const { userId } = req.body; // 로그인 API 구현되면 변경될 예정
+
+  try {
+    const tickets = await db.Tickets.findAll({
+      where: { userId: userId },
+      include: [
+        {
+          model: db.Flights,
+          attributes: ["departureTime"],
+
+          include: [
+            {
+              model: db.Airports,
+              as: "departureAirport",
+              attributes: ["name", "code"],
+            },
+            {
+              model: db.Airports,
+              as: "arrivalAirport",
+              attributes: ["name", "code"],
+            },
+          ],
+        },
+      ],
+    });
+    if (tickets.length === 0) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "Tickets Not found" });
+    }
+
+    return res.status(StatusCodes.OK).json(tickets);
+  } catch (error) {
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      error: "Internal Server Error",
+      details: error.message,
+    });
+  }
+};
 
 const postTickets = async (req, res) => {
   const { userId, flightId, seatIds, ticketType } = req.body;
@@ -75,15 +114,11 @@ const postTickets = async (req, res) => {
 
     return res.status(StatusCodes.CREATED).json(tickets);
   } catch (error) {
-    if (dbTransaction) {
-      await dbTransaction.rollback();
-    }
-
-    console.error("Error creating ticket:", error.message);
-    return res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ message: "Internal Server Error", error: error.message });
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      error: "Internal Server Error",
+      details: error.message,
+    });
   }
 };
 
-module.exports = { postTickets };
+module.exports = { getTicketsByUserId,postTickets };

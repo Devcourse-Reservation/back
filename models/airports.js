@@ -38,14 +38,17 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: false,
     }
   );
-  Airports.hasMany(sequelize.models.Flights, {
-    foreignKey: "departure_airport_id",
-    as: "departureFlights",
-  });
 
-  Airports.hasMany(sequelize.models.Flights, {
-    foreignKey: "arrival_airport_id",
-    as: "arrivalFlights",
-  });
+  Airports.associate = (models) => {
+    Airports.hasMany(models.Flights, {
+      foreignKey: "departure_airport_id",
+      as: "departureFlights",
+    });
+
+    Airports.hasMany(models.Flights, {
+      foreignKey: "arrival_airport_id",
+      as: "arrivalFlights",
+    });
+  };
   return Airports;
 };
