@@ -2,7 +2,9 @@ const sequelize = require("../config/db");
 const db = require("../models");
 const { SeatStatus, TicketStatus } = require("../common/StatusEnums");
 const { StatusCodes } = require("http-status-codes");
-const generateRandomTicketNumber = require("../utils/generateRandomTicketNumber");
+const {
+  generateRandomTicketNumber,
+} = require("../utils/generateRandomTicketNumber");
 const { TicketType } = require("../common/TypeEnums");
 const { validateSeats } = require("../utils/seatValidation");
 
@@ -46,6 +48,10 @@ const postTickets = async (req, res) => {
       })
     );
 
+    const flight = await db.Flights.findOne({
+      where: { id: flightId },
+    });
+
     const tickets = await Promise.all(
       seatIds.map(async (seatId) => {
         const ticket = await db.Tickets.create(
@@ -54,7 +60,10 @@ const postTickets = async (req, res) => {
             flightId,
             seatId,
             status: TicketStatus.Pending,
-            reservationNumber: generateRandomTicketNumber(),
+            reservationNumber: generateRandomTicketNumber(
+              flight.flightName,
+              seatId
+            ),
             ticketType,
           },
           { transaction: dbTransaction }
