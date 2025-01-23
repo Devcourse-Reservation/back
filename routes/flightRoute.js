@@ -7,9 +7,9 @@ const router = express.Router();
 const { verifyToken } = require("../middlewares/jwtMiddleware");
 
 router.use(express.json());
-router.use(verifyToken);
+
 
 router.post("/search", searchFlights);
-router.get("/:flightId", getFlightDetails);
+router.get("/:flightId", verifyToken, getFlightDetails);
 
 module.exports = router;
