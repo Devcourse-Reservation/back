@@ -42,28 +42,23 @@ module.exports = (sequelize, DataTypes) => {
         field: "reserved_at",
         allowNull: true,
       },
-      ticketType: {
-        type: DataTypes.STRING,
-        field: "ticket_type",
-        allowNull: false,
-      },
       cancelledAt: {
         type: DataTypes.DATE,
         field: "cancelled_at",
         allowNull: true,
       },
-      created_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-      },
-      updated_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-      },
+      // created_at: {
+      //   type: DataTypes.DATE,
+      //   defaultValue: DataTypes.NOW,
+      // },
+      // updated_at: {
+      //   type: DataTypes.DATE,
+      //   defaultValue: DataTypes.NOW,
+      // },
     },
     {
       tableName: "tickets",
-      timestamps: false,
+      //timestamps: false,
     }
   );
 

@@ -1,4 +1,4 @@
-const Airports = require("../models/Airport");
+const { Airports } = require("../models");
 
 const insertAirports = async () => {
   try {

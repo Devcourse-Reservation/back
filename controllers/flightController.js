@@ -1,6 +1,5 @@
 const { Op } = require("sequelize"); // Sequelize에서 Op를 임포트
-const Flight = require("../models/Flight");
-const Airport = require("../models/Airport");
+const db = require("../models");
 
 const searchFlights = async (req, res) => {
   try {
@@ -17,8 +16,8 @@ const searchFlights = async (req, res) => {
     }
 
     // 출발 공항 정보 조회
-    const originAirport = await Airport.findOne({ where: { code: origin } });
-    const destinationAirport = await Airport.findOne({
+    const originAirport = await db.Airports.findOne({ where: { code: origin } });
+    const destinationAirport = await db.Airports.findOne({
       where: { code: destination },
     });
 
@@ -33,8 +32,8 @@ const searchFlights = async (req, res) => {
 
     // 출발 항공편 검색 조건
     const departureConditions = {
-      departureAirportId: originAirport.airportId,
-      arrivalAirportId: destinationAirport.airportId,
+      departureAirportId: originAirport.id,
+      arrivalAirportId: destinationAirport.id,
       departureTime: {
         [Op.gte]: new Date(departureDate), // 출발 날짜는 요청된 날짜 이후
         [Op.lt]: new Date(
@@ -46,16 +45,16 @@ const searchFlights = async (req, res) => {
     };
 
     // 출발 항공편 검색
-    const departureFlights = await Flight.findAll({
+    const departureFlights = await db.Flights.findAll({
       where: departureConditions,
       include: [
         {
-          model: Airport,
+          model: db.Airports,
           as: "departureAirport",
           attributes: ["code"],
         },
         {
-          model: Airport,
+          model: db.Airports,
           as: "arrivalAirport",
           attributes: ["code"],
         },
@@ -66,8 +65,8 @@ const searchFlights = async (req, res) => {
     let returnFlights = [];
     if (returnDate) {
       const returnConditions = {
-        departureAirportId: destinationAirport.airportId,
-        arrivalAirportId: originAirport.airportId,
+        departureAirportId: destinationAirport.id,
+        arrivalAirportId: originAirport.id,
         departureTime: {
           [Op.gte]: new Date(returnDate),
           [Op.lt]: new Date(
@@ -76,17 +75,17 @@ const searchFlights = async (req, res) => {
         },
       };
 
-      returnFlights = await Flight.findAll({
+      returnFlights = await db.Flights.findAll({
         where: returnConditions,
         order: [["departureTime", "ASC"]],
         include: [
           {
-            model: Airport,
+            model: db.Airports,
             as: "departureAirport",
             attributes: ["name", "city", "code"],
           },
           {
-            model: Airport,
+            model: db.Airports,
             as: "arrivalAirport",
             attributes: ["name", "city", "code"],
           },
@@ -113,16 +112,16 @@ const getFlightDetails = async (req, res) => {
       return res.status(400).json({ error: "flightId가 누락되었습니다." });
     }
     // 항공편 조회
-    const flight = await Flight.findOne({
+    const flight = await db.Flights.findOne({
       where: { id: flightId }, // flightId로 항공편 조회
       include: [
         {
-          model: Airport,
+          model: db.Airports,
           as: "departureAirport",
           attributes: ["code"], // 출발 공항 코드만 필요
         },
         {
-          model: Airport,
+          model: db.Airports,
           as: "arrivalAirport",
           attributes: ["code"], // 도착 공항 코드만 필요
         },
@@ -135,7 +134,7 @@ const getFlightDetails = async (req, res) => {
 
     // 항공편 정보 반환
     return res.json({
-      flightId: flight.flightNumber,
+      flightId: flight.flightname,
       airline: flight.airline,
       origin: flight.departureAirport.code, // 출발 공항 코드
       destination: flight.arrivalAirport.code, // 도착 공항 코드

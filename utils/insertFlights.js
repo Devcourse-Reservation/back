@@ -1,11 +1,11 @@
-const Flights = require("../models/Flight");
+const { Flights } = require("../models");
 
 const insertFlights = async () => {
   try {
     await Flights.bulkCreate([
       // 기존 항공편
       {
-        flightNumber: "AA101",
+        flightName: "AA101",
         airline: "American Airlines",
         status: "Scheduled",
         departureAirportId: 1, // LAX
@@ -14,7 +14,7 @@ const insertFlights = async () => {
         arrivalTime: "2025-01-20 16:00:00",
       },
       {
-        flightNumber: "DL202",
+        flightName: "DL202",
         airline: "Delta Airlines",
         status: "Scheduled",
         departureAirportId: 2, // JFK
@@ -23,7 +23,7 @@ const insertFlights = async () => {
         arrivalTime: "2025-01-21 12:30:00",
       },
       {
-        flightNumber: "UA303",
+        flightName: "UA303",
         airline: "United Airlines",
         status: "Delayed",
         departureAirportId: 3, // SFO
@@ -32,7 +32,7 @@ const insertFlights = async () => {
         arrivalTime: "2025-01-22 18:00:00",
       },
       {
-        flightNumber: "KE404",
+        flightName: "KE404",
         airline: "Korean Air",
         status: "Scheduled",
         departureAirportId: 5, // ICN
@@ -41,7 +41,7 @@ const insertFlights = async () => {
         arrivalTime: "2025-01-23 20:00:00",
       },
       {
-        flightNumber: "AA505",
+        flightName: "AA505",
         airline: "American Airlines",
         status: "Cancelled",
         departureAirportId: 4, // ORD
@@ -52,7 +52,7 @@ const insertFlights = async () => {
 
       // 돌아오는 항공편
       {
-        flightNumber: "AA102",
+        flightName: "AA102",
         airline: "American Airlines",
         status: "Scheduled",
         departureAirportId: 2, // JFK
@@ -61,7 +61,7 @@ const insertFlights = async () => {
         arrivalTime: "2025-01-25 22:00:00",
       },
       {
-        flightNumber: "DL203",
+        flightName: "DL203",
         airline: "Delta Airlines",
         status: "Scheduled",
         departureAirportId: 3, // SFO
@@ -70,7 +70,7 @@ const insertFlights = async () => {
         arrivalTime: "2025-01-26 17:30:00",
       },
       {
-        flightNumber: "UA304",
+        flightName: "UA304",
         airline: "United Airlines",
         status: "Delayed",
         departureAirportId: 4, // ORD
@@ -79,7 +79,7 @@ const insertFlights = async () => {
         arrivalTime: "2025-01-27 23:00:00",
       },
       {
-        flightNumber: "KE405",
+        flightName: "KE405",
         airline: "Korean Air",
         status: "Scheduled",
         departureAirportId: 1, // LAX
@@ -88,7 +88,7 @@ const insertFlights = async () => {
         arrivalTime: "2025-01-28 05:00:00",
       },
       {
-        flightNumber: "AA506",
+        flightName: "AA506",
         airline: "American Airlines",
         status: "Cancelled",
         departureAirportId: 5, // ICN

@@ -41,18 +41,20 @@ module.exports = (sequelize, DataTypes) => {
         field: "arrival_time",
         allowNull: false,
       },
-      created_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-      },
-      updated_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-      },
+      // createdAt: {
+      //   type: DataTypes.DATE,
+      //   defaultValue: DataTypes.NOW,
+      //   field: "created_at",
+      // },
+      // updatedAt: {
+      //   type: DataTypes.DATE,
+      //   defaultValue: DataTypes.NOW,
+      //   field: "updated_at",
+      // },
     },
     {
       tableName: "flights",
-      timestamps: false,
+      //timestamps: false,
     }
   );
   Flights.associate = (models) => {
