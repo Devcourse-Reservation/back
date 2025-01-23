@@ -13,8 +13,11 @@ const verifyToken = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.userId = decoded.id;
-    req.userEmail = decoded.email;
+    req.user = {
+      id: decoded.id,
+      email: decoded.email,
+      userType: decoded.userType, 
+    };
     // 여기서 이메일 사용
     next();
   } catch (error) {
