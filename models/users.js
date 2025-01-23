@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       name: {
         type: DataTypes.STRING,
         allowNull: false,
+        defaultValue: "User",
       },
       phoneNumber: {
         type: DataTypes.STRING,
@@ -29,19 +30,20 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         field: "user_type",
         allowNull: false,
+        defaultValue: "user", // 기본값 설정 (ex: user, admin)
       },
-      created_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-      },
-      updated_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-      },
+      // created_at: {
+      //   type: DataTypes.DATE,
+      //   defaultValue: DataTypes.NOW,
+      // },
+      // updated_at: {
+      //   type: DataTypes.DATE,
+      //   defaultValue: DataTypes.NOW,
+      // },
     },
     {
       tableName: "users",
-      timestamps: false,
+      //timestamps: false,
     }
   );
   Users.associate = (models) => {

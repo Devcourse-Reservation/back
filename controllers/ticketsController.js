@@ -4,12 +4,18 @@ const {
   generateRandomTicketNumber,
 } = require("../utils/generateRandomTicketNumber");
 const { TicketType } = require("../common/TypeEnums");
+const { SeatStatus, TicketStatus } = require("../common/StatusEnums");
 const { validateSeats } = require("../utils/seatValidation");
+const { sequelize } = db;
+
+
 
 
 const getTicketByTicketId = async (req, res) => {
   let { ticketId } = req.params;
-  const { userId, flightId } = req.body;
+  //const { flightId } = req.body;
+  const userId = req.userId;
+
   ticketId = parseInt(ticketId);
   try {
     const ticket = await db.Tickets.findOne({
@@ -46,7 +52,7 @@ const getTicketByTicketId = async (req, res) => {
       return res.status(StatusCodes.NOT_FOUND).json({
         error: "Ticket Not found",
       });
-
+    const flightId = ticket.flightId;
     const passengerCount = await db.Tickets.count({
       where: {
         userId: userId,
@@ -69,7 +75,7 @@ const getTicketByTicketId = async (req, res) => {
 };
 
 const getTicketsByUserId = async (req, res) => {
-  const { userId } = req.body; // 로그인 API 구현되면 변경될 예정
+  const userId = req.userId; // 로그인 API 구현되면 변경될 예정
 
   try {
     const tickets = await db.Tickets.findAll({
@@ -110,7 +116,8 @@ const getTicketsByUserId = async (req, res) => {
 };
 
 const postTickets = async (req, res) => {
-  const { userId, flightId, seatIds, ticketType } = req.body;
+  const { flightId, seatIds, ticketType } = req.body;
+  const userId = req.userId
 
   const uniqueSeatIds = new Set(seatIds);
   if (uniqueSeatIds.size !== seatIds.length) {
@@ -176,6 +183,7 @@ const postTickets = async (req, res) => {
 
     return res.status(StatusCodes.CREATED).json(tickets);
   } catch (error) {
+    if (dbTransaction) await dbTransaction.rollback(); // 추가
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       error: "Internal Server Error",
       details: error.message,

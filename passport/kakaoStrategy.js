@@ -7,7 +7,7 @@ dotenv.config({ path: "back/.env" });
 const kakaoStrategy = new KakaoStrategy(
   {
     clientID: process.env.KAKAO_CLIENT_ID,
-    //clientSecret: process.env.KAKAO_CLIENT_SECRET,  // 선택 사항
+    clientSecret: process.env.KAKAO_CLIENT_SECRET,  // 선택 사항
     callbackURL: process.env.KAKAO_REDIRECT_URL,
   },
   async (oauthAccessToken, refreshToken, profile, cb) => {

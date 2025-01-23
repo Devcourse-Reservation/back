@@ -14,9 +14,14 @@ const verifyToken = (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.userId = decoded.id;
+    req.userEmail = decoded.email;
+    // 여기서 이메일 사용
     next();
   } catch (error) {
-    return res.status(StatusCodes.UNAUTHORIZED).end();
+    if (error.name === "TokenExpiredError") {
+      return res.status(StatusCodes.UNAUTHORIZED).json({ message: "Token expired" });
+    }
+    return res.status(StatusCodes.UNAUTHORIZED).json({ message: "Invalid token" });
   }
 };
 

@@ -3,20 +3,33 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-var sequelize = require("./config/db");
 const dotenv = require("dotenv");
 dotenv.config({ path: "back/.env" });
 
 var app = express();
 
-var flightRouter = require("./routes/flights");
-var authRouter = require("./routes/authRoute");
-const ticketRoute = require("./routes/tickets");
+// 라우트 등록
+var flightRoute = require("./routes/flightRoute");
+var authRoute = require("./routes/authRoute");
+const ticketRoute = require("./routes/ticketRoute");
 
 const PORT = process.env.PORT || 3000;
 
 // 모델 임포트
-const db = require("./models"); // 모델을 임포트 (여기서 동기화도 이루어짐)
+const db = require("./models"); // models/index.js에서 정의된 db 객체 사용
+
+db.sequelize
+  .authenticate()
+  .then(() => {
+    console.log("MySQL connected successfully");
+    return db.sequelize.sync({ alter: true });
+  })
+  .then(() => {
+    console.log("Models synced");
+  })
+  .catch((err) => {
+    console.error("Unable to connect to the database:", err);
+  });
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -29,23 +42,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/tickets", ticketRoute);
-app.use("/flights", flightRouter);
-app.use("/auth", authRouter);
-
-const Flight = require("./models/Flight");
-
-sequelize
-  .authenticate()
-  .then(() => {
-    console.log("MySQL connected successfully");
-    return sequelize.sync({ alter: true });
-  })
-  .then(() => {
-    console.log("Models synced");
-  })
-  .catch((err) => {
-    console.error("Unable to connect to the database:", err);
-  });
+app.use("/flights", flightRoute);
+app.use("/auth", authRoute);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

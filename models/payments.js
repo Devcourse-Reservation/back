@@ -38,20 +38,20 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DATE,
         field: "refunded_at",
       },
-      createdAt: {
-        type: DataTypes.DATE,
-        field: "created_at",
-        defaultValue: DataTypes.NOW,
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        field: "updated_at",
-        defaultValue: DataTypes.NOW,
-      },
+      // createdAt: {
+      //   type: DataTypes.DATE,
+      //   field: "created_at",
+      //   defaultValue: DataTypes.NOW,
+      // },
+      // updatedAt: {
+      //   type: DataTypes.DATE,
+      //   field: "updated_at",
+      //   defaultValue: DataTypes.NOW,
+      // },
     },
     {
       tableName: "payments",
-      timestamps: false,
+      //timestamps: false,
     }
   );
   Payments.associate = (models) => {
