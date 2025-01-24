@@ -29,7 +29,7 @@ router.get(
     session: false,
     failureRedirect: "/auth/kakao",
   }),
-  createToken,
+  createToken, 
 );
 
 router.get(

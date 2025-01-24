@@ -32,14 +32,6 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         defaultValue: "user", // 기본값 설정 (ex: user, admin)
       },
-      // created_at: {
-      //   type: DataTypes.DATE,
-      //   defaultValue: DataTypes.NOW,
-      // },
-      // updated_at: {
-      //   type: DataTypes.DATE,
-      //   defaultValue: DataTypes.NOW,
-      // },
     },
     {
       tableName: "users",
