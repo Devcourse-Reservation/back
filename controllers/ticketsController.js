@@ -116,16 +116,11 @@ const getTicketsByUserId = async (req, res) => {
 };
 
 const postTickets = async (req, res) => {
-  const { flightId, ticketType } = req.body;
-  let { seatIds } = req.body;
-  const userId = req.userId;
+  const { userId, flightId, seatIds, ticketType } = req.body;
+  const processedSeatIds = Array.isArray(seatIds) ? seatIds : [seatIds];
 
-  if (!Array.isArray(seatIds)) {
-    seatIds = [seatIds];
-  }
-
-  const uniqueSeatIds = new Set(seatIds);
-  if (uniqueSeatIds.size !== seatIds.length) {
+  const uniqueSeatIds = new Set(processedSeatIds);
+  if (uniqueSeatIds.size !== processedSeatIds.length) {
     return res.status(StatusCodes.BAD_REQUEST).json({
       message: "Seat IDs should not contain duplicates.",
     });
@@ -144,7 +139,7 @@ const postTickets = async (req, res) => {
 
     const seats = await db.Seats.findAll({
       where: {
-        id: seatIds,
+        id: processedSeatIds,
         flightId: flightId,
         status: SeatStatus.Available,
       },
@@ -152,7 +147,7 @@ const postTickets = async (req, res) => {
       transaction: dbTransaction,
     });
 
-    validateSeats(seatIds, seats);
+    validateSeats(processedSeatIds, seats);
 
     await Promise.all(
       seats.map(async (seat) => {
@@ -166,7 +161,7 @@ const postTickets = async (req, res) => {
     });
 
     const tickets = await Promise.all(
-      seatIds.map(async (seatId) => {
+      processedSeatIds.map(async (seatId) => {
         const ticket = await db.Tickets.create(
           {
             userId,
