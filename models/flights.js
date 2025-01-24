@@ -21,34 +21,40 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      departure_airport_id: {
+      departureAirportId: {
         type: DataTypes.BIGINT,
+        field: "departure_airport_id",
         allowNull: false,
       },
-      arrival_airport_id: {
+      arrivalAirportId: {
         type: DataTypes.BIGINT,
+        field: "arrival_airport_id",
         allowNull: false,
       },
-      departure_time: {
+      departureTime: {
         type: DataTypes.DATE,
+        field: "departure_time",
         allowNull: false,
       },
-      arrival_time: {
+      arrivalTime: {
         type: DataTypes.DATE,
+        field: "arrival_time",
         allowNull: false,
       },
-      created_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-      },
-      updated_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-      },
+      // createdAt: {
+      //   type: DataTypes.DATE,
+      //   defaultValue: DataTypes.NOW,
+      //   field: "created_at",
+      // },
+      // updatedAt: {
+      //   type: DataTypes.DATE,
+      //   defaultValue: DataTypes.NOW,
+      //   field: "updated_at",
+      // },
     },
     {
       tableName: "flights",
-      timestamps: false,
+      //timestamps: false,
     }
   );
   Flights.associate = (models) => {
@@ -60,6 +66,10 @@ module.exports = (sequelize, DataTypes) => {
     Flights.belongsTo(models.Airports, {
       foreignKey: "arrival_airport_id",
       as: "arrivalAirport",
+    });
+    Flights.hasMany(models.Tickets, {
+      foreignKey: "flight_id",
+      sourceKey: "id",
     });
   };
   return Flights;
