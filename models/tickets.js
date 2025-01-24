@@ -32,33 +32,51 @@ module.exports = (sequelize, DataTypes) => {
         field: "reservation_number",
         unique: true,
       },
-      reservedAt: {
-        type: DataTypes.DATE,
-        field: "reserved_at",
-        allowNull: true,
-      },
       ticketType: {
         type: DataTypes.STRING,
         field: "ticket_type",
         allowNull: false,
       },
-      cancelledAt: {
+      reservedAt: {
         type: DataTypes.DATE,
+        field: "reserved_at",
         allowNull: true,
       },
-      created_at: {
+      cancelledAt: {
         type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
+        field: "cancelled_at",
+        allowNull: true,
       },
-      updated_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-      },
+      // created_at: {
+      //   type: DataTypes.DATE,
+      //   defaultValue: DataTypes.NOW,
+      // },
+      // updated_at: {
+      //   type: DataTypes.DATE,
+      //   defaultValue: DataTypes.NOW,
+      // },
     },
     {
       tableName: "tickets",
-      timestamps: false,
+      //timestamps: false,
     }
   );
+
+  Tickets.associate = (models) => {
+    Tickets.belongsTo(models.Flights, {
+      foreignKey: "flightId",
+      targetKey: "id",
+    });
+
+    Tickets.belongsTo(models.Seats, {
+      foreignKey: "seatId",
+      targetKey: "id",
+    });
+
+    Tickets.hasOne(models.Payments, {
+      foreignKey: "ticketId",
+      sourceKey: "id",
+    });
+  };
   return Tickets;
 };

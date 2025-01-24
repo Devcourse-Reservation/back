@@ -24,28 +24,33 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      created_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-      },
-      updated_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-      },
+      // createdAt: {
+      //   type: DataTypes.DATE,
+      //   defaultValue: DataTypes.NOW,
+      //   field: "created_at",
+      // },
+      // updatedAt: {
+      //   type: DataTypes.DATE,
+      //   defaultValue: DataTypes.NOW,
+      //   field: "updated_at",
+      // },
     },
     {
       tableName: "airports",
-      timestamps: false,
+      //timestamps: false,
     }
   );
-  Airports.hasMany(sequelize.models.Flights, {
-    foreignKey: "departure_airport_id",
-    as: "departureFlights",
-  });
 
-  Airports.hasMany(sequelize.models.Flights, {
-    foreignKey: "arrival_airport_id",
-    as: "arrivalFlights",
-  });
+  Airports.associate = (models) => {
+    Airports.hasMany(models.Flights, {
+      foreignKey: "departure_airport_id",
+      as: "departureFlights",
+    });
+
+    Airports.hasMany(models.Flights, {
+      foreignKey: "arrival_airport_id",
+      as: "arrivalFlights",
+    });
+  };
   return Airports;
 };

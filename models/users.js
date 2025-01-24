@@ -15,32 +15,42 @@ module.exports = (sequelize, DataTypes) => {
       name: {
         type: DataTypes.STRING,
         allowNull: false,
+        defaultValue: "User",
       },
-      phone_number: {
+      phoneNumber: {
         type: DataTypes.STRING,
+        field: "phone_number",
         allowNull: true,
       },
       provider: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      user_type: {
+      userType: {
         type: DataTypes.STRING,
+        field: "user_type",
         allowNull: false,
+        defaultValue: "user", // 기본값 설정 (ex: user, admin)
       },
-      created_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-      },
-      updated_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-      },
+      // created_at: {
+      //   type: DataTypes.DATE,
+      //   defaultValue: DataTypes.NOW,
+      // },
+      // updated_at: {
+      //   type: DataTypes.DATE,
+      //   defaultValue: DataTypes.NOW,
+      // },
     },
     {
       tableName: "users",
-      timestamps: false,
+      //timestamps: false,
     }
   );
+  Users.associate = (models) => {
+    Users.hasMany(models.Payments, {
+      foreignKey: "userId",
+      sourceKey: "id",
+    });
+  };
   return Users;
 };
