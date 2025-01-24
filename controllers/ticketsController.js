@@ -116,8 +116,13 @@ const getTicketsByUserId = async (req, res) => {
 };
 
 const postTickets = async (req, res) => {
-  const { flightId, seatIds, ticketType } = req.body;
-  const userId = req.userId
+  const { flightId, ticketType } = req.body;
+  let { seatIds } = req.body;
+  const userId = req.userId;
+
+  if (!Array.isArray(seatIds)) {
+    seatIds = [seatIds];
+  }
 
   const uniqueSeatIds = new Set(seatIds);
   if (uniqueSeatIds.size !== seatIds.length) {
@@ -183,11 +188,14 @@ const postTickets = async (req, res) => {
 
     return res.status(StatusCodes.CREATED).json(tickets);
   } catch (error) {
-    if (dbTransaction) await dbTransaction.rollback(); // 추가
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-      error: "Internal Server Error",
-      details: error.message,
-    });
+    if (dbTransaction) {
+      await dbTransaction.rollback();
+    }
+
+    console.error("Error creating ticket:", error.message);
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: "Internal Server Error", error: error.message });
   }
 };
 
