@@ -1,48 +1,31 @@
 const db = require("../models");
 const { StatusCodes } = require("http-status-codes");
 const { SeatStatus } = require("../common/StatusEnums");
-const {
-  validateSeatFields,
-  validateSeatsArray,
-} = require("../utils/seatValidation");
-const { validateFlightId } = require("../utils/flightValidation");
+const { validateUserType } = require("../utils/userValidation");
+const updateSeat = async (req, res) => {
+  validateUserType(req.user);
+  const { seatId } = req.params;
+  const { status } = req.body;
 
-const bulkCreateSeats = async (req, res) => {
-  const { seats } = req.body;
-  const { flightId } = req.params;
-
-  validateSeatsArray(seats);
-  validateSeatFields(seats);
-
-  const transaction = await db.sequelize.transaction();
-
+  if (!Object.values(SeatStatus).includes(status)) {
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      error: "Invalid status value.",
+      validStatuses: Object.values(SeatStatus),
+    });
+  }
   try {
-    const flight = await db.Flights.findOne({ where: { id: flightId } });
-    if (!flight)
+    const seat = await db.Seats.findByPk(seatId);
+    if (!seat)
       return res
         .status(StatusCodes.NOT_FOUND)
-        .json({ message: "Flight Not found" });
+        .json({ error: "Seat not found " });
 
-    const processedSeats = seats.map((seat) => {
-      return {
-        flightId,
-        seatNumber: seat.seatNumber,
-        class: seat.class,
-        status: SeatStatus.Available,
-        price: seat.price,
-      };
+    await seat.update({ status });
+    res.status(StatusCodes.OK).json({
+      message: "좌석 정보가 성공적으로 업데이트되었습니다.",
+      seat,
     });
-    const createdSeats = await db.Seats.bulkCreate(processedSeats, {
-      validate: true,
-      transaction,
-    });
-
-    await transaction.commit();
-
-    return res.status(StatusCodes.CREATED).json(createdSeats);
   } catch (error) {
-    await transaction.rollback();
-
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       error: "Internal Server Error",
       details: error.message,
@@ -50,4 +33,4 @@ const bulkCreateSeats = async (req, res) => {
   }
 };
 
-module.exports = { bulkCreateSeats };
+module.exports = { updateSeat };
