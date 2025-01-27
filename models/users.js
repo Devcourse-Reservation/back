@@ -43,6 +43,10 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "userId",
       sourceKey: "id",
     });
+    Users.hasMany(models.Tickets, {
+      foreignKey: "userId", 
+      sourceKey: "id",
+    });
   };
   return Users;
 };

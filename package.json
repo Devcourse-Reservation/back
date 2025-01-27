@@ -12,7 +12,6 @@
     "crypto": "^1.0.1",
     "debug": "~2.6.9",
     "dotenv": "^16.4.7",
-
     "ecdsa-sig-formatter": "^1.0.11",
     "express": "^4.21.2",
     "gh": "^2.8.9",
@@ -21,6 +20,8 @@
     "jsonwebtoken": "^9.0.2",
     "morgan": "~1.9.1",
     "mysql2": "^3.12.0",
+    "node-cron": "^3.0.3",
+    "nodemailer": "^6.10.0",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "passport-kakao": "^1.0.1",

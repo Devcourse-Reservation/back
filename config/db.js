@@ -9,8 +9,9 @@ const sequelize = new Sequelize(
   {
     host: process.env.DB_HOST,
     dialect: "mysql",
+    //timezone: "+09:00",
     port: process.env.DB_PORT,
-    logging: false,
+    logging: console.log,
     define: {
       timestamps: true, // 기본적으로 createdAt과 updatedAt 추가
       underscored: true, // snake_case로 필드 이름 설정
