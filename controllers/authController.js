@@ -19,7 +19,11 @@ const findOrCreateUser = async (email, provider, phone_number, name) => {
         name: userName,
       },
     });
-
+    if (created) {
+      console.log("New user created:", user.email);
+    } else {
+      console.log("Existing user found:", user.email);
+    }
     return user;
   } catch (error) {
     console.error("Error in findOrCreateUser:", error);

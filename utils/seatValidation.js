@@ -1,4 +1,4 @@
-const { SeatStatus } = require("../common/StatusEnums");
+//const { SeatStatus } = require("../common/StatusEnums");
 
 const validateSeats = (seatIds, seats) => {
   const notFoundSeats = seatIds.filter(
