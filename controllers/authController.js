@@ -63,49 +63,6 @@ const createToken = (req, res) => {
   res.status(StatusCodes.OK).end();
 };
 
-// const refreshAccessToken = async (req, res) => {
-//   const refreshToken = req.cookies.refreshToken;
 
-//   if (!refreshToken) {
-//     return res
-//       .status(StatusCodes.UNAUTHORIZED)
-//       .json({ message: "Refresh token missing." });
-//   }
-
-//   try {
-//     const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
-
-//     // Retrieve the user and validate the refresh token
-//     const user = await User.findOne({ where: { id: decoded.id, refreshToken } });
-
-//     if (!user) {
-//       return res
-//         .status(StatusCodes.UNAUTHORIZED)
-//         .json({ message: "Invalid refresh token." });
-//     }
-
-//     const accessToken = jwt.sign(
-//       { id: user.id, email: user.email },
-//       process.env.JWT_SECRET,
-//       {
-//         subject: "user",
-//         expiresIn: "5m",
-//         issuer: process.env.JWT_ISSUER,
-//       }
-//     );
-
-//     res.cookie("accessToken", accessToken, {
-//       httpOnly: true,
-//       sameSite: "strict",
-//       secure: true,
-//     });
-
-//     res.status(StatusCodes.OK).end();
-//   } catch (error) {
-//     res
-//       .status(StatusCodes.UNAUTHORIZED)
-//       .json({ message: "Invalid or expired refresh token." });
-//   }
-// };
 
 module.exports = { findOrCreateUser, createToken };
