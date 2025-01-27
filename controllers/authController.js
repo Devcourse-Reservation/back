@@ -34,34 +34,31 @@ const createToken = (req, res) => {
     id: user.id,
     email: user.email,
   };
-  // const refreshPayload = {
-  //   id: user.id,
-  // };
+  const refreshPayload = {
+    id: user.id,
+  };
   
   const accessToken = jwt.sign(accessPayload, process.env.JWT_SECRET, {
     subject: "user",
-    expiresIn: "10m",
+    expiresIn: "3m",
     issuer: process.env.JWT_ISSUER,
   });
-  // const refreshToken = jwt.sign(refreshPayload, process.env.JWT_REFRESH_SECRET, {
-  //   subject: "user",
-  //   expiresIn: "7d", // 7 days
-  //   issuer: process.env.JWT_ISSUER,
-  // });
-
-  // user.refreshToken = refreshToken;
-  // user.save();
+  const refreshToken = jwt.sign(refreshPayload, process.env.JWT_REFRESH_SECRET, {
+    subject: "user",
+    expiresIn: "7d", // 7 days
+    issuer: process.env.JWT_ISSUER,
+  });
 
   res.cookie("accessToken", accessToken, {
     httpOnly: true,
     sameSite: "strict",
     secure: true,
   });
-  // res.cookie("refreshToken", refreshToken, {
-  //   httpOnly: true,
-  //   sameSite: "strict",
-  //   secure: true,
-  // });
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true,
+    sameSite: "strict",
+    secure: true,
+  });
 
   res.status(StatusCodes.OK).end();
 };
