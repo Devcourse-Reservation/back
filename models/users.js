@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       userType: {
-        type: DataTypes.STRING,
+        type: DataTypes.ENUM("admin", "user"),
         field: "user_type",
         allowNull: false,
         defaultValue: "user", // 기본값 설정 (ex: user, admin)

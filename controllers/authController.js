@@ -37,6 +37,7 @@ const createToken = (req, res) => {
   const accessPayload = {
     id: user.id,
     email: user.email,
+    userType: user.userType,
   };
   const refreshPayload = {
     id: user.id,
@@ -44,7 +45,7 @@ const createToken = (req, res) => {
   
   const accessToken = jwt.sign(accessPayload, process.env.JWT_SECRET, {
     subject: "user",
-    expiresIn: "3m",
+    expiresIn: "10m",
     issuer: process.env.JWT_ISSUER,
   });
   const refreshToken = jwt.sign(refreshPayload, process.env.JWT_REFRESH_SECRET, {

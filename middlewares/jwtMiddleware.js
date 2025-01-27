@@ -26,7 +26,6 @@ const verifyToken = async (req, res, next) => {
     req.userId = decoded.id;
     req.userEmail = decoded.email;
     req.userType = decoded.userType;
-    console.log(req.user);
     return next();
   }
 
@@ -43,7 +42,7 @@ const verifyToken = async (req, res, next) => {
       process.env.JWT_SECRET,
       {
         subject: "user",
-        expiresIn: "3m",
+        expiresIn: "10m",
         issuer: process.env.JWT_ISSUER,
       }
     );
