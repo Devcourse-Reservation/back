@@ -25,7 +25,7 @@ const verifyToken = async (req, res, next) => {
   if (decoded) {
     req.userId = decoded.id;
     req.userEmail = decoded.email;
-    console.log(req.user);
+    req.userType = decoded.userType;
     return next();
   }
 
@@ -38,11 +38,11 @@ const verifyToken = async (req, res, next) => {
   try {
     const user = await verifyRefreshToken(refreshToken);
     const newAccessToken = jwt.sign(
-      { id: user.id, email: user.email },
+      { id: user.id, email: user.email, userType: user.userType },
       process.env.JWT_SECRET,
       {
         subject: "user",
-        expiresIn: "3m",
+        expiresIn: "10m",
         issuer: process.env.JWT_ISSUER,
       }
     );
@@ -54,6 +54,7 @@ const verifyToken = async (req, res, next) => {
     console.log(newAccessToken);
     req.userId = user.id;
     req.userEmail = user.email;
+    req.userType = user.userType;
     return next();
   } catch (error) {
     return res.status(StatusCodes.UNAUTHORIZED).json({ message: error.message });
