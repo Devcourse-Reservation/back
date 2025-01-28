@@ -15,7 +15,6 @@ const naverStrategy = new NaverStrategy(
     const email = profile._json.email;
     const provider = profile.provider;
     const [name, phoneNumber] = await getNaverInfo(oauthAccessToken);
-
     if (!email) {
       return cb(new Error("No email found in profile"));
     }

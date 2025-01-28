@@ -7,9 +7,7 @@ const { TicketType } = require("../common/TypeEnums");
 const { SeatStatus, TicketStatus } = require("../common/StatusEnums");
 const { validateSeats } = require("../utils/seatValidation");
 const { sequelize } = db;
-
-
-
+const sendEmail = require("../utils/sendEmail");
 
 const getTicketByTicketId = async (req, res) => {
   let { ticketId } = req.params;
@@ -116,7 +114,8 @@ const getTicketsByUserId = async (req, res) => {
 };
 
 const postTickets = async (req, res) => {
-  const { userId, flightId, seatIds, ticketType } = req.body;
+  const userId = req.userId
+  const { flightId, seatIds, ticketType } = req.body;
   const processedSeatIds = Array.isArray(seatIds) ? seatIds : [seatIds];
 
   const uniqueSeatIds = new Set(processedSeatIds);
@@ -160,6 +159,10 @@ const postTickets = async (req, res) => {
       where: { id: flightId },
     });
 
+    const user = await db.Users.findOne({
+      where: { id: userId },
+    });
+
     const tickets = await Promise.all(
       processedSeatIds.map(async (seatId) => {
         const ticket = await db.Tickets.create(
@@ -181,9 +184,24 @@ const postTickets = async (req, res) => {
     );
     await dbTransaction.commit();
 
+    const ticketDetails = tickets
+      .map((ticket) => `Seat ID: ${ticket.seatId}, Ticket Number: ${ticket.reservationNumber}`)
+      .join("\n");
+
+    const messageText = `
+      Thank you for your reservation!
+      Here are your ticket details:
+      Flight: ${flight.flightName}
+      Ticket Type: ${ticketType}
+      Seats:
+      ${ticketDetails}
+    `;
+    
+    await sendEmail(user.email, "Your Ticket Reservation", messageText);
+
     return res.status(StatusCodes.CREATED).json(tickets);
   } catch (error) {
-    if (dbTransaction) {
+    if (dbTransaction && !dbTransaction.finished) {
       await dbTransaction.rollback();
     }
 

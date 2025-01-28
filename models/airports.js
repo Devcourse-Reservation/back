@@ -24,31 +24,20 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      // createdAt: {
-      //   type: DataTypes.DATE,
-      //   defaultValue: DataTypes.NOW,
-      //   field: "created_at",
-      // },
-      // updatedAt: {
-      //   type: DataTypes.DATE,
-      //   defaultValue: DataTypes.NOW,
-      //   field: "updated_at",
-      // },
     },
     {
       tableName: "airports",
-      //timestamps: false,
     }
   );
 
   Airports.associate = (models) => {
     Airports.hasMany(models.Flights, {
-      foreignKey: "departure_airport_id",
+      foreignKey: "departureAirportId",
       as: "departureFlights",
     });
 
     Airports.hasMany(models.Flights, {
-      foreignKey: "arrival_airport_id",
+      foreignKey: "arrivalAirportId",
       as: "arrivalFlights",
     });
   };
