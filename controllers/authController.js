@@ -14,7 +14,7 @@ const findOrCreateUser = async (email, provider, phone_number, name) => {
       where: { email, provider: provider },
       defaults: {
         email,
-        phone_number: phone,
+        phoneNumber: phone,
         provider,
         name: userName,
       },

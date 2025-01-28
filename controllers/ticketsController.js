@@ -9,9 +9,6 @@ const { validateSeats } = require("../utils/seatValidation");
 const { sequelize } = db;
 const sendEmail = require("../utils/sendEmail");
 
-
-
-
 const getTicketByTicketId = async (req, res) => {
   let { ticketId } = req.params;
   //const { flightId } = req.body;
@@ -191,7 +188,7 @@ const postTickets = async (req, res) => {
       .map((ticket) => `Seat ID: ${ticket.seatId}, Ticket Number: ${ticket.reservationNumber}`)
       .join("\n");
 
-    const emailText = `
+    const messageText = `
       Thank you for your reservation!
       Here are your ticket details:
       Flight: ${flight.flightName}
@@ -199,8 +196,8 @@ const postTickets = async (req, res) => {
       Seats:
       ${ticketDetails}
     `;
-
-    await sendEmail(user.email, "Your Ticket Reservation", emailText);
+    
+    await sendEmail(user.email, "Your Ticket Reservation", messageText);
 
     return res.status(StatusCodes.CREATED).json(tickets);
   } catch (error) {

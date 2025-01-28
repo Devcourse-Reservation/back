@@ -5,11 +5,10 @@ const sendEmail = require("../utils/sendEmail");
 // 스케줄러: 매분 실행
 cron.schedule("* * * * *", async () => {
   try {
-    console.log("Running ticket reminder job...");
+    //console.log("Running ticket reminder job...");
 
     const now = new Date();
     const oneHourLater = new Date(now.getTime() + 60 * 60 * 1000);
-    
     // 출발 시간이 1시간 이내인 티켓 조회
     const tickets = await db.Tickets.findAll({
       include: [
@@ -28,9 +27,6 @@ cron.schedule("* * * * *", async () => {
         
       },
     });
-    //console.log(Flights.departureTime);
-    console.log(now);
-    console.log(tickets);
 
     // 이메일 알림 발송
     for (const ticket of tickets) {

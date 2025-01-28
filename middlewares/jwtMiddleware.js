@@ -51,7 +51,6 @@ const verifyToken = async (req, res, next) => {
       sameSite: "strict",
       secure: true,
     });
-    console.log(newAccessToken);
     req.userId = user.id;
     req.userEmail = user.email;
     req.userType = user.userType;
@@ -63,8 +62,7 @@ const verifyToken = async (req, res, next) => {
 
 const verifyRefreshToken = async (refreshToken) => {
   try {
-    const decodedRefresh = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
-    console.log("Decoded Refresh Token:", decodedRefresh); 
+    const decodedRefresh = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET); 
     const user = await User.findOne({ where: { id: decodedRefresh.id } });
     if (!user) throw new Error("User not found");
     return user;

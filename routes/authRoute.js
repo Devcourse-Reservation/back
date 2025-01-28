@@ -3,6 +3,7 @@ const passport = require("../passport/passport");
 const { createToken } = require("../controllers/authController");
 const router = express.Router();
 
+
 router.use(passport.initialize());
 
 router.get(
@@ -21,7 +22,10 @@ router.get(
   createToken,
 );
 
-router.get("/kakao", passport.authenticate("kakao"));
+router.get(
+  "/kakao", 
+  passport.authenticate("kakao"),
+);
 
 router.get(
   "/kakao/callback",
