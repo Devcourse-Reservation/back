@@ -1,6 +1,6 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../config/db");
-
+//const Queue = require('./queue');  // 경로와 이름 확인
 const db = {};
 
 db.Sequelize = Sequelize;
@@ -11,23 +11,10 @@ db.Flights = require("./flights")(sequelize, DataTypes);
 db.Payments = require("./payments")(sequelize, DataTypes);
 db.Seats = require("./seats")(sequelize, DataTypes);
 db.Tickets = require("./tickets")(sequelize, DataTypes);
+db.Queue = require("./queue")(sequelize, DataTypes);
 db.Users = require("./users")(sequelize, DataTypes);
 
-// db.Airport.associate(db);
-// db.Flights.associate(db);
-// db.Payments.associate(db);
-// db.Seats.associate(db);
-// db.Tickets.associate(db);
-// db.Users.associate(db);
-
-// sequelize
-//   .sync({ force: false })
-//   .then(() => {
-//     console.log("Database synced");
-//   })
-//   .catch((error) => {
-//     console.error("Error syncing database:", error);
-//   });
+//db.Queue = Queue(sequelize, DataTypes);  // Queue 모델 추가
 
 // 관계 설정
 Object.keys(db).forEach((modelName) => {

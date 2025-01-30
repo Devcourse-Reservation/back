@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flight Queue</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 20px;
+    }
+    h1 {
+      color: #007bff;
+    }
+    #queueDisplay, #queueList, #expiredList, #removedList {
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      display: inline-block;
+      background: #f8f9fa;
+      width: 80%;
+      max-width: 400px;
+      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease-in-out; 
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      padding: 5px;
+      font-size: 1.1em;
+      transition: opacity 0.5s ease-in-out;
+    }
+    .fade-out {
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+    #queueList {
+      margin-top: 10px;
+      border-top: 2px solid #007bff;
+    }
+    #expiredList {
+      margin-top: 10px;
+      border-top: 2px solid #dc3545;
+    }
+    #removedList {
+      margin-top: 10px;
+      border-top: 2px solid #28a745;
+    }
+    .highlight {
+      font-size: 1.3em;
+      color: #dc3545;
+      font-weight: bold;
+    }
+    .fade-out {
+  opacity: 1;
+  transition: opacity 2s ease-out;
+    }
+
+    .fade-out {
+    opacity: 0;
+    }
+
+  </style>
+</head>
+<body>
+  <h1>Flight Reservation Queue</h1>
+  <div id="queueDisplay">⏳ 대기열 정보를 가져오는 중...</div>
+  <div id="queueList"></div>
+  <div id="removedList"></div>
+  <div id="expiredList"></div>
+
+  <script src="queueClient.js"></script>
+</body>
+</html>

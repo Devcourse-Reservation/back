@@ -47,6 +47,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
   Users.associate = (models) => {
+    Users.hasMany(models.Queue, {
+      foreignKey: "userId",  // Queue 모델에서 참조할 외래 키
+      sourceKey: "id",       // Users 모델의 primary key를 참조
+    });
+    
     Users.hasMany(models.Payments, {
       foreignKey: "userId",
       sourceKey: "id",
