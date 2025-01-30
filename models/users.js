@@ -27,19 +27,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       userType: {
-        type: DataTypes.STRING,
+        type: DataTypes.ENUM("admin", "user"),
         field: "user_type",
         allowNull: false,
         defaultValue: "user", // 기본값 설정 (ex: user, admin)
       },
-      // created_at: {
-      //   type: DataTypes.DATE,
-      //   defaultValue: DataTypes.NOW,
-      // },
-      // updated_at: {
-      //   type: DataTypes.DATE,
-      //   defaultValue: DataTypes.NOW,
-      // },
     },
     {
       tableName: "users",
@@ -54,6 +46,10 @@ module.exports = (sequelize, DataTypes) => {
     
     Users.hasMany(models.Payments, {
       foreignKey: "userId",
+      sourceKey: "id",
+    });
+    Users.hasMany(models.Tickets, {
+      foreignKey: "userId", 
       sourceKey: "id",
     });
   };

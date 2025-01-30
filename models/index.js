@@ -14,8 +14,6 @@ db.Tickets = require("./tickets")(sequelize, DataTypes);
 db.Queue = require("./queue")(sequelize, DataTypes);
 db.Users = require("./users")(sequelize, DataTypes);
 
-//db.Queue = Queue(sequelize, DataTypes);  // Queue 모델 추가
-
 // 관계 설정
 Object.keys(db).forEach((modelName) => {
   if (db[modelName].associate) {

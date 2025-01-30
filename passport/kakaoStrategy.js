@@ -15,7 +15,7 @@ const kakaoStrategy = new KakaoStrategy(
     const provider = profile.provider;
     const phoneNumber = profile.phone_number;
     const name = profile.username;
-
+    
     if (!email) {
       return cb(new Error("No email found in profile"));
     }

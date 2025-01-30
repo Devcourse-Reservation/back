@@ -41,34 +41,23 @@ module.exports = (sequelize, DataTypes) => {
         field: "arrival_time",
         allowNull: false,
       },
-      // createdAt: {
-      //   type: DataTypes.DATE,
-      //   defaultValue: DataTypes.NOW,
-      //   field: "created_at",
-      // },
-      // updatedAt: {
-      //   type: DataTypes.DATE,
-      //   defaultValue: DataTypes.NOW,
-      //   field: "updated_at",
-      // },
     },
     {
       tableName: "flights",
-      //timestamps: false,
     }
   );
   Flights.associate = (models) => {
     Flights.belongsTo(models.Airports, {
-      foreignKey: "departure_airport_id",
+      foreignKey: "departureAirportId",
       as: "departureAirport",
     });
 
     Flights.belongsTo(models.Airports, {
-      foreignKey: "arrival_airport_id",
+      foreignKey: "arrivalAirportId",
       as: "arrivalAirport",
     });
     Flights.hasMany(models.Tickets, {
-      foreignKey: "flight_id",
+      foreignKey: "flightId",
       sourceKey: "id",
     });
   };

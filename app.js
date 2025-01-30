@@ -1,8 +1,8 @@
-const createError = require("http-errors");
-const express = require("express");
-const path = require("path");
-const cookieParser = require("cookie-parser");
-const logger = require("morgan");
+var createError = require("http-errors");
+var express = require("express");
+var path = require("path");
+var cookieParser = require("cookie-parser");
+var logger = require("morgan");
 const dotenv = require("dotenv");
 dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
@@ -15,6 +15,8 @@ const ticketRoute = require("./routes/ticketRoute");
 const queueRoute = require("./routes/queueRoute");
 const deleteExpiredQueue = require('./jobs/deleteExpiredQueue');
 const consumeQueue = require('./kafka/consumer');
+
+const PORT = process.env.PORT || 3000;
 
 // 모델 임포트
 const db = require("./models");
@@ -54,10 +56,16 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use('/airports', airportRoute);
 app.use("/tickets", ticketRoute);
 app.use("/flights", flightRoute);
 app.use("/auth", authRoute);
 app.use("/queue", queueRoute);
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+require('./websocket/websocket')(server);
 
 // 만료된 항목 삭제 주기 작업
 const schedule = require('node-schedule');
@@ -83,5 +91,7 @@ app.use((err, req, res) => {
     },
   });
 });
+
+
 
 module.exports = app;
