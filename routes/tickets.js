@@ -1,9 +1,10 @@
 const express = require("express");
-const { postTickets } = require("../controller/ticketsController");
+const { postTickets } = require("../controllers/ticketsController");
 
 const router = express.Router();
 router.use(express.json());
 
-router.post("/", postTickets);
-
-module.exports = router;
+module.exports = (io) => {
+  router.post("/", (req, res) => postTickets(req, res, io));
+  return router;
+};

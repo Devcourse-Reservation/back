@@ -7,7 +7,7 @@ const validateSeats = (seatIds, seats) => {
 
   const errorMessages = [];
   if (notFoundSeats.length > 0) {
-    errorMessages.push(`Seats not found: ${notFoundSeats.join(", ")}`);
+    errorMessages.push(`Seats not found OR Seats Duplicate : ${notFoundSeats.join(", ")}`);
   }
 
   if (errorMessages.length > 0) {

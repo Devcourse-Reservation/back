@@ -8,7 +8,7 @@ const {
 const { TicketType } = require("../common/TypeEnums");
 const { validateSeats } = require("../utils/seatValidation");
 
-const postTickets = async (req, res) => {
+const postTickets = async (req, res, io) => {
   const { flightId, ticketType } = req.body;
   let { seatIds } = req.body;
   const userId = req.userId;
@@ -50,7 +50,11 @@ const postTickets = async (req, res) => {
     await Promise.all(
       seats.map(async (seat) => {
         seat.status = SeatStatus.Reserved;
-        return seat.save({ transaction: dbTransaction });
+        await seat.save({ transaction: dbTransaction });
+        io.to(flightId).emit("seatUpdate", {
+          seatId: seat.id,
+          status: seat.status,
+        });
       })
     );
 
