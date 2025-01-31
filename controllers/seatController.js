@@ -2,7 +2,7 @@ const db = require("../models");
 const { StatusCodes } = require("http-status-codes");
 const { SeatStatus } = require("../common/StatusEnums");
 const { validateUserType } = require("../utils/userValidation");
-const updateSeat = async (req, res) => {
+const updateSeat = async (req, res, io) => {
   validateUserType(req.user);
   const { seatId } = req.params;
   const { status } = req.body;
@@ -21,6 +21,12 @@ const updateSeat = async (req, res) => {
         .json({ error: "Seat not found " });
 
     await seat.update({ status });
+
+    io.to(seat.flightId).emit("seatUpdate", {
+      seatId: seat.id,
+      status: seat.status,
+    });
+
     res.status(StatusCodes.OK).json({
       message: "좌석 정보가 성공적으로 업데이트되었습니다.",
       seat,
@@ -32,5 +38,4 @@ const updateSeat = async (req, res) => {
     });
   }
 };
-
 module.exports = { updateSeat };
