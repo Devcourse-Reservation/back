@@ -1,36 +1,22 @@
 const db = require("../models");
 const { StatusCodes } = require("http-status-codes");
-const { SeatStatus } = require("../common/StatusEnums");
-const { validateUserType } = require("../utils/userValidation");
-const updateSeat = async (req, res, io) => {
-  validateUserType(req.user);
-  const { seatId } = req.params;
-  const { status } = req.body;
+const db = require("../models");
+const { StatusCodes } = require("http-status-codes");
 
-  if (!Object.values(SeatStatus).includes(status)) {
-    return res.status(StatusCodes.BAD_REQUEST).json({
-      error: "Invalid status value.",
-      validStatuses: Object.values(SeatStatus),
-    });
-  }
+const getSeats = async (req, res) => {
+  const { flightId } = req.params;
+
   try {
-    const seat = await db.Seats.findByPk(seatId);
-    if (!seat)
+    const seats = await db.Seats.findAll({
+      where: { flightId: flightId },
+    });
+
+    if (!seats)
       return res
         .status(StatusCodes.NOT_FOUND)
-        .json({ error: "Seat not found " });
+        .json({ message: "Tickets Not found" });
 
-    await seat.update({ status });
-
-    io.to(seat.flightId).emit("seatUpdate", {
-      seatId: seat.id,
-      status: seat.status,
-    });
-
-    res.status(StatusCodes.OK).json({
-      message: "좌석 정보가 성공적으로 업데이트되었습니다.",
-      seat,
-    });
+    return res.status(StatusCodes.OK).json(seats);
   } catch (error) {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       error: "Internal Server Error",
@@ -38,4 +24,7 @@ const updateSeat = async (req, res, io) => {
     });
   }
 };
-module.exports = { updateSeat };
+
+module.exports = {
+  getSeats,
+};

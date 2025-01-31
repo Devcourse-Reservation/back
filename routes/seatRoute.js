@@ -1,9 +1,9 @@
 const express = require("express");
-const { updateSeat } = require("../controllers/seatController");
+const { getSeat } = require("../controllers/seatController");
 
 const router = express.Router();
 
 module.exports = (io) => {
-  router.put("/:seatId", (req, res) => updateSeat(req, res, io));
+  router.put("/:seatId", (req, res) => getSeat(req, res));
   return router;
 };
