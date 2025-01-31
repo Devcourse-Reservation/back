@@ -14,6 +14,7 @@ const flightRoute = require("./routes/flightRoute");
 const authRoute = require("./routes/authRoute");
 const ticketRoute = require("./routes/ticketRoute");
 const airportRoute = require("./routes/airportRoute");
+const paymentRoute = require("./routes/paymentRoute");
 
 const PORT = process.env.PORT || 3000;
 
@@ -47,6 +48,7 @@ app.use('/airports', airportRoute);
 app.use("/tickets", ticketRoute);
 app.use("/flights", flightRoute);
 app.use("/auth", authRoute);
+app.use("/payments", paymentRoute);
 
 
 app.listen(PORT, () => {
