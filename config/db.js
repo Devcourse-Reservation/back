@@ -11,6 +11,10 @@ const sequelize = new Sequelize(
     dialect: "mysql",
     port: process.env.DB_PORT,
     logging: false,
+    define: {
+      timestamps: true, // 기본적으로 createdAt과 updatedAt 추가
+      underscored: true, // snake_case로 필드 이름 설정
+    },
   }
 );
 

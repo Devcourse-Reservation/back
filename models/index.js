@@ -11,14 +11,12 @@ db.Seats = require("./seats")(sequelize, DataTypes);
 db.Users = require("./users")(sequelize, DataTypes);
 db.Flights = require("./flights")(sequelize, DataTypes);
 db.Airports = require("./airports")(sequelize, DataTypes);
+db.Payments = require("./payments")(sequelize, DataTypes);
+db.Refunds = require("./refunds")(sequelize, DataTypes);
 
-sequelize
-  .sync({ force: false })
-  .then(() => {
-    console.log("Database synced");
-  })
-  .catch((error) => {
-    console.error("Error syncing database:", error);
-  });
-
+Object.keys(db).forEach((modelName) => {
+  if (db[modelName].associate) {
+    db[modelName].associate(db); // associate 메서드가 존재하는 경우만 실행
+  }
+});
 module.exports = db;

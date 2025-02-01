@@ -10,9 +10,11 @@ const port = process.env.PORT;
 const server = http.createServer(app);
 
 const io = initSocket(server);
-const ticketRoute = require("./routes/tickets");
+// const ticketRoute = require("./routes/tickets");
+const paymentRoute = require("./routes/paymentRoute");
 
-app.use("/tickets", ticketRoute(io));
+// app.use("/tickets", ticketRoute(io));
+app.use("/payment", paymentRoute(io));
 
 sequelize
   .sync({ force: false })
