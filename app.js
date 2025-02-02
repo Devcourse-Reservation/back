@@ -4,9 +4,14 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 const ticketReminderJob = require("./jobs/ticketReminderJob");
 var logger = require("morgan");
-const dotenv = require("dotenv");
-dotenv.config({ path: "back/.env" });
+const http = require("http");
+const initSocket = require("./socket");
 
+const dotenv = require("dotenv");
+dotenv.config({ path: "back/config/.env" });
+
+const server = http.createServer(app);
+const io = initSocket(server);
 var app = express();
 
 // 라우트 등록
@@ -14,6 +19,7 @@ const flightRoute = require("./routes/flightRoute");
 const authRoute = require("./routes/authRoute");
 const ticketRoute = require("./routes/ticketRoute");
 const airportRoute = require("./routes/airportRoute");
+const seatRoutes = require("./routes/seatRoute");
 
 const PORT = process.env.PORT || 3000;
 
@@ -43,11 +49,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use('/airports', airportRoute);
-app.use("/tickets", ticketRoute);
+app.use("/airports", airportRoute);
+app.use("/tickets", ticketRoute(io));
 app.use("/flights", flightRoute);
 app.use("/auth", authRoute);
-
+app.use("/seats", seatRoutes(io));
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
@@ -67,7 +73,5 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render("error");
 });
-
-
 
 module.exports = app;

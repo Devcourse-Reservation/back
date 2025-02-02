@@ -7,6 +7,11 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true,
       },
+      orderId: {
+        type: DataTypes.STRING,
+        field: "order_id",
+        allowNull: false,
+      },
       userId: {
         type: DataTypes.BIGINT,
         field: "user_id",
@@ -26,9 +31,18 @@ module.exports = (sequelize, DataTypes) => {
         field: "payment_method",
         allowNull: false,
       },
+      transactionId: {
+        type: DataTypes.STRING,
+        field: "transaction_id",
+        allowNull: false,
+      },
       status: {
         type: DataTypes.STRING,
         allowNull: false,
+      },
+      requestedAt: {
+        type: DataTypes.DATE,
+        field: "requested_at",
       },
       paidAt: {
         type: DataTypes.DATE,
@@ -49,6 +63,10 @@ module.exports = (sequelize, DataTypes) => {
     });
     Payments.belongsTo(models.Users, {
       foreignKey: "userId",
+    });
+    Payments.hasOne(models.Refunds, {
+      foreignKey: "paymentId",
+      sourceKey: "id",
     });
   };
 

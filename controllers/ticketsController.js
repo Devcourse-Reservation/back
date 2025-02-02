@@ -11,7 +11,6 @@ const sendEmail = require("../utils/sendEmail");
 
 const getTicketByTicketId = async (req, res) => {
   let { ticketId } = req.params;
-  //const { flightId } = req.body;
   const userId = req.userId;
 
   ticketId = parseInt(ticketId);
@@ -73,8 +72,7 @@ const getTicketByTicketId = async (req, res) => {
 };
 
 const getTicketsByUserId = async (req, res) => {
-  const userId = req.userId; // 로그인 API 구현되면 변경될 예정
-
+  const userId = req.userId;
   try {
     const tickets = await db.Tickets.findAll({
       where: { userId: userId },
@@ -113,13 +111,13 @@ const getTicketsByUserId = async (req, res) => {
   }
 };
 
-const postTickets = async (req, res) => {
-  const userId = req.userId
-  const { flightId, seatIds, ticketType } = req.body;
-  const processedSeatIds = Array.isArray(seatIds) ? seatIds : [seatIds];
+const postTickets = async (req, res, io) => {
+  const userId = req.userId;
+  const { flightId, ticketType, seatIds } = req.body;
+  const processSeatIds = Array.isArray(seatIds) ? seatIds : [seatIds];
 
-  const uniqueSeatIds = new Set(processedSeatIds);
-  if (uniqueSeatIds.size !== processedSeatIds.length) {
+  const uniqueSeatIds = new Set(processSeatIds);
+  if (uniqueSeatIds.size !== processSeatIds.length) {
     return res.status(StatusCodes.BAD_REQUEST).json({
       message: "Seat IDs should not contain duplicates.",
     });
@@ -134,11 +132,29 @@ const postTickets = async (req, res) => {
   let dbTransaction;
 
   try {
+    const flight = await db.Flights.findOne({
+      where: { id: flightId },
+    });
+
+    if (!flight)
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ error: "Flight not found" });
+
+    const user = await db.Users.findOne({
+      where: { id: userId },
+    });
+
+    if (!user)
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ error: "Flight not found" });
+
     dbTransaction = await sequelize.transaction();
 
     const seats = await db.Seats.findAll({
       where: {
-        id: processedSeatIds,
+        id: processSeatIds,
         flightId: flightId,
         status: SeatStatus.Available,
       },
@@ -146,25 +162,21 @@ const postTickets = async (req, res) => {
       transaction: dbTransaction,
     });
 
-    validateSeats(processedSeatIds, seats);
+    validateSeats(processSeatIds, seats);
 
     await Promise.all(
       seats.map(async (seat) => {
         seat.status = SeatStatus.Reserved;
-        return seat.save({ transaction: dbTransaction });
+        await seat.save({ transaction: dbTransaction });
+        io.to(flightId).emit("seatUpdate", {
+          seatId: seat.id,
+          status: seat.status,
+        });
       })
     );
 
-    const flight = await db.Flights.findOne({
-      where: { id: flightId },
-    });
-
-    const user = await db.Users.findOne({
-      where: { id: userId },
-    });
-
     const tickets = await Promise.all(
-      processedSeatIds.map(async (seatId) => {
+      processSeatIds.map(async (seatId) => {
         const ticket = await db.Tickets.create(
           {
             userId,
@@ -185,7 +197,10 @@ const postTickets = async (req, res) => {
     await dbTransaction.commit();
 
     const ticketDetails = tickets
-      .map((ticket) => `Seat ID: ${ticket.seatId}, Ticket Number: ${ticket.reservationNumber}`)
+      .map(
+        (ticket) =>
+          `Seat ID: ${ticket.seatId}, Ticket Number: ${ticket.reservationNumber}`
+      )
       .join("\n");
 
     const messageText = `
@@ -196,7 +211,7 @@ const postTickets = async (req, res) => {
       Seats:
       ${ticketDetails}
     `;
-    
+
     await sendEmail(user.email, "Your Ticket Reservation", messageText);
 
     return res.status(StatusCodes.CREATED).json(tickets);
