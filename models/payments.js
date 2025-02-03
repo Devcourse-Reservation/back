@@ -64,6 +64,10 @@ module.exports = (sequelize, DataTypes) => {
     Payments.belongsTo(models.Users, {
       foreignKey: "userId",
     });
+    Payments.hasOne(models.Refunds, {
+      foreignKey: "paymentId",
+      sourceKey: "id",
+    });
   };
 
   return Payments;
