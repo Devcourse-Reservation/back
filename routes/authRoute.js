@@ -1,7 +1,12 @@
 const express = require("express");
 const passport = require("../passport/passport");
-const { createToken } = require("../controllers/authController");
+const { 
+  createToken,
+  adminRequest, 
+  verifyAdmin
+ } = require("../controllers/authController");
 const router = express.Router();
+const { verifyToken } = require("../middlewares/jwtMiddleware");
 
 
 router.use(passport.initialize());
@@ -49,5 +54,9 @@ router.get(
   }),
   createToken,
 );
+
+router.post("/admin", verifyToken, adminRequest);
+
+router.post("/verify", verifyToken, verifyAdmin);
 
 module.exports = router;

@@ -20,6 +20,8 @@ const authRoute = require("./routes/authRoute");
 const ticketRoute = require("./routes/ticketRoute");
 const airportRoute = require("./routes/airportRoute");
 const seatRoutes = require("./routes/seatRoute");
+const paymentRoute = require("./routes/paymentRoute");
+
 
 const PORT = process.env.PORT || 3000;
 
@@ -54,6 +56,8 @@ app.use("/tickets", ticketRoute(io));
 app.use("/flights", flightRoute);
 app.use("/auth", authRoute);
 app.use("/seats", seatRoutes(io));
+app.use("/payments", paymentRoute);
+
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

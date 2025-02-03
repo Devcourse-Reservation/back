@@ -7,7 +7,7 @@ const { TicketType } = require("../common/TypeEnums");
 const { SeatStatus, TicketStatus } = require("../common/StatusEnums");
 const { validateSeats } = require("../utils/seatValidation");
 const { sequelize } = db;
-const sendEmail = require("../utils/sendEmail");
+
 
 const getTicketByTicketId = async (req, res) => {
   let { ticketId } = req.params;
@@ -213,7 +213,6 @@ const postTickets = async (req, res, io) => {
     `;
 
     await sendEmail(user.email, "Your Ticket Reservation", messageText);
-
     return res.status(StatusCodes.CREATED).json(tickets);
   } catch (error) {
     if (dbTransaction && !dbTransaction.finished) {

@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true,
       },
-      orderId: {
+      orderId:{
         type: DataTypes.STRING,
         field: "order_id",
         allowNull: false,
@@ -40,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      requestedAt: {
+      requestedAt:{
         type: DataTypes.DATE,
         field: "requested_at",
       },
