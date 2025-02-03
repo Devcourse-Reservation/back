@@ -9,6 +9,7 @@ dotenv.config({ path: path.resolve(__dirname, "../.env") });
 const app = express();
 
 // 라우트 등록
+const airportRoute = require("./routes/airportRoute");
 const flightRoute = require("./routes/flightRoute");
 const authRoute = require("./routes/authRoute");
 const ticketRoute = require("./routes/ticketRoute");
@@ -16,7 +17,7 @@ const queueRoute = require("./routes/queueRoute");
 const deleteExpiredQueue = require('./jobs/deleteExpiredQueue');
 const consumeQueue = require('./kafka/consumer');
 
-const PORT = process.env.PORT || 3000;
+// const PORT = process.env.PORT || 3000;
 
 // 모델 임포트
 const db = require("./models");
@@ -62,10 +63,9 @@ app.use("/flights", flightRoute);
 app.use("/auth", authRoute);
 app.use("/queue", queueRoute);
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
-require('./websocket/websocket')(server);
+// app.listen(PORT, () => {
+//   console.log(`Server running on port ${PORT}`);
+// });
 
 // 만료된 항목 삭제 주기 작업
 const schedule = require('node-schedule');

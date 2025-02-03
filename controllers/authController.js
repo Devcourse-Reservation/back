@@ -48,6 +48,8 @@ const createToken = (req, res) => {
     expiresIn: "10m",
     issuer: process.env.JWT_ISSUER,
   });
+  console.log("Access Token:", accessToken);
+
   const refreshToken = jwt.sign(refreshPayload, process.env.JWT_REFRESH_SECRET, {
     subject: "user",
     expiresIn: "7d", // 7 days
