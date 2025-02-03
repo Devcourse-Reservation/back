@@ -3,10 +3,18 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+const http = require("http");
+const initSocket = require("./socket");
+
 const dotenv = require("dotenv");
 dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 const app = express();
+const server = http.createServer(app);
+const io = initSocket(server);
+
+//dotenv.config({ path: "back/config/.env" });
+
 
 // 라우트 등록
 const airportRoute = require("./routes/airportRoute");
@@ -14,9 +22,11 @@ const flightRoute = require("./routes/flightRoute");
 const authRoute = require("./routes/authRoute");
 const ticketRoute = require("./routes/ticketRoute");
 const queueRoute = require("./routes/queueRoute");
+const seatRoutes = require("./routes/seatRoute");
+const paymentRoute = require("./routes/paymentRoute");
+
 const deleteExpiredQueue = require('./jobs/deleteExpiredQueue');
 const consumeQueue = require('./kafka/consumer');
-
 // const PORT = process.env.PORT || 3000;
 
 // 모델 임포트
@@ -57,11 +67,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use('/airports', airportRoute);
-app.use("/tickets", ticketRoute);
+app.use("/airports", airportRoute);
+app.use("/tickets", ticketRoute(io));
 app.use("/flights", flightRoute);
 app.use("/auth", authRoute);
 app.use("/queue", queueRoute);
+app.use("/seats", seatRoutes(io));
+app.use("/payments", paymentRoute);
 
 // app.listen(PORT, () => {
 //   console.log(`Server running on port ${PORT}`);
@@ -74,9 +86,9 @@ schedule.scheduleJob('0 * * * *', () => {
 });
 
 // WebSocket 서버 초기화
-const server = app.listen(process.env.PORT || 3000, () => {
-  console.log(`Server running on port ${process.env.PORT || 3000}`);
-});
+// server.listen(process.env.PORT || 3000, () => {
+//   console.log(`Server running on port ${process.env.PORT || 3000}`);
+// });
 require('./websocket/websocket')(server);
 
 app.use((req, res, next) => {
@@ -91,7 +103,4 @@ app.use((err, req, res) => {
     },
   });
 });
-
-
-
 module.exports = app;
