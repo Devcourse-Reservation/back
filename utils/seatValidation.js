@@ -1,4 +1,4 @@
-//const { SeatStatus } = require("../common/StatusEnums");
+const { StatusCodes } = require("http-status-codes");
 
 const validateSeats = (seatIds, seats) => {
   const notFoundSeats = seatIds.filter(
@@ -15,4 +15,21 @@ const validateSeats = (seatIds, seats) => {
   }
 };
 
-module.exports = { validateSeats };
+const validateSeatFields = (seats) => {
+  const hasInvalidSeat = seats.some(
+    (seat) => !seat.seatNumber || !seat.class || !seat.price
+  );
+  if (hasInvalidSeat) {
+    throw new Error("Each seat must include seatNumber, class, and price.");
+  }
+};
+
+const validateSeatsArray = (seats) => {
+  if (!Array.isArray(seats) || seats.length === 0) {
+    const error = new Error("Seats data is required and should be an array.");
+    error.statusCode = StatusCodes.BAD_REQUEST;
+    throw error;
+  }
+};
+
+module.exports = { validateSeats, validateSeatFields, validateSeatsArray };
