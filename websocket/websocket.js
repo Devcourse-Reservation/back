@@ -68,13 +68,11 @@ module.exports = (server) => {
       // 사용자 대기열 순서 찾기
       const userQueueItem = queueItems.find(item => item.userId === ws.userId);
       const myPosition = userQueueItem ? userQueueItem.queuePosition : null;
-      const usersBehind = myPosition ? queueItems.length - myPosition : 0;
 
       const queueData = {
         event: 'queueUpdate',
         data: queueStatus,
         myPosition,
-        usersBehind
       };
 
       ws.send(JSON.stringify(queueData));

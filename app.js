@@ -13,8 +13,6 @@ const app = express();
 const server = http.createServer(app);
 const io = initSocket(server);
 
-//dotenv.config({ path: "back/config/.env" });
-
 
 // 라우트 등록
 const airportRoute = require("./routes/airportRoute");
@@ -27,9 +25,7 @@ const paymentRoute = require("./routes/paymentRoute");
 
 const deleteExpiredQueue = require('./jobs/deleteExpiredQueue');
 const consumeQueue = require('./kafka/consumer');
-// const PORT = process.env.PORT || 3000;
 
-// 모델 임포트
 const db = require("./models");
 
 db.sequelize
@@ -75,10 +71,6 @@ app.use("/queue", queueRoute);
 app.use("/seats", seatRoutes(io));
 app.use("/payments", paymentRoute);
 
-// app.listen(PORT, () => {
-//   console.log(`Server running on port ${PORT}`);
-// });
-
 // 만료된 항목 삭제 주기 작업
 const schedule = require('node-schedule');
 schedule.scheduleJob('0 * * * *', () => {
@@ -86,9 +78,9 @@ schedule.scheduleJob('0 * * * *', () => {
 });
 
 // WebSocket 서버 초기화
-// server.listen(process.env.PORT || 3000, () => {
-//   console.log(`Server running on port ${process.env.PORT || 3000}`);
-// });
+server.listen(process.env.PORT || 3000, () => {
+  console.log(`Server running on port ${process.env.PORT || 3000}`);
+});
 require('./websocket/websocket')(server);
 
 app.use((req, res, next) => {
