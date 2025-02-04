@@ -6,7 +6,7 @@ const dotenv = require("dotenv");
 const sendEmail = require("../utils/sendEmail");
 
 
-dotenv.config({ path: "back/.env" });
+dotenv.config({ path: "flights-back/config/.env" });
 
 const findOrCreateUser = async (email, provider, phone_number, name) => {
   const phone = phone_number || "";

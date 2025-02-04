@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 const User = require("../models").Users;
 const { StatusCodes } = require("http-status-codes");
 
-dotenv.config({ path: "back/.env" });
+dotenv.config({ path: "flights-back/config/.env" });
 
 const verifyAccessToken = (token) => {
   try {

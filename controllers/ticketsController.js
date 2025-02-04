@@ -195,24 +195,7 @@ const postTickets = async (req, res, io) => {
       })
     );
     await dbTransaction.commit();
-
-    const ticketDetails = tickets
-      .map(
-        (ticket) =>
-          `Seat ID: ${ticket.seatId}, Ticket Number: ${ticket.reservationNumber}`
-      )
-      .join("\n");
-
-    const messageText = `
-      Thank you for your reservation!
-      Here are your ticket details:
-      Flight: ${flight.flightName}
-      Ticket Type: ${ticketType}
-      Seats:
-      ${ticketDetails}
-    `;
-
-    await sendEmail(user.email, "Your Ticket Reservation", messageText);
+    
     return res.status(StatusCodes.CREATED).json(tickets);
   } catch (error) {
     if (dbTransaction && !dbTransaction.finished) {

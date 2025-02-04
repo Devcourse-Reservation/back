@@ -2,7 +2,7 @@ const KakaoStrategy = require("passport-kakao").Strategy;
 const dotenv = require("dotenv");
 const { findOrCreateUser } = require("../controllers/authController");
 
-dotenv.config({ path: "back/.env" });
+dotenv.config({ path: "flights-back/config/.env" });
 
 const kakaoStrategy = new KakaoStrategy(
   {

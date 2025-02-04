@@ -5,6 +5,7 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const http = require("http");
 const initSocket = require("./socket");
+//const cors = require("cors");
 
 const dotenv = require("dotenv");
 dotenv.config({ path: path.resolve(__dirname, "../.env") });
@@ -12,6 +13,15 @@ dotenv.config({ path: path.resolve(__dirname, "../.env") });
 const app = express();
 const server = http.createServer(app);
 const io = initSocket(server);
+
+const cors = require("cors");
+
+// ✅ 모든 요청에서 CORS 허용
+app.use(cors({
+  origin: "http://localhost:5500",  // ✅ 프론트엔드 도메인만 허용
+  methods: ["GET", "POST"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
 
 
 // 라우트 등록
@@ -25,6 +35,7 @@ const paymentRoute = require("./routes/paymentRoute");
 
 const deleteExpiredQueue = require('./jobs/deleteExpiredQueue');
 const consumeQueue = require('./kafka/consumer');
+// const PORT = process.env.PORT || 3000;
 
 const db = require("./models");
 
@@ -53,6 +64,8 @@ consumeQueue()
     process.exit(1); // 필요한 경우 프로세스 종료
   });
 
+  
+//app.use(cors());
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
@@ -61,7 +74,7 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "../public")));
 
 app.use("/airports", airportRoute);
 app.use("/tickets", ticketRoute(io));
@@ -69,7 +82,7 @@ app.use("/flights", flightRoute);
 app.use("/auth", authRoute);
 app.use("/queue", queueRoute);
 app.use("/seats", seatRoutes(io));
-app.use("/payments", paymentRoute);
+app.use("/payments", paymentRoute(io));
 
 // 만료된 항목 삭제 주기 작업
 const schedule = require('node-schedule');

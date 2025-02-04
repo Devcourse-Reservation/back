@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 const { findOrCreateUser } = require("../controllers/authController");
 const axios = require("axios");
 
-dotenv.config({ path: "back/.env" });
+dotenv.config({ path: "flights-back/config/.env" });
 
 const naverStrategy = new NaverStrategy(
   {
