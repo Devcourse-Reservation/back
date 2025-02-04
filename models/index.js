@@ -7,11 +7,8 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.Tickets = require("./tickets")(sequelize, DataTypes);
-<<<<<<< HEAD
 db.Queue = require("./queue")(sequelize, DataTypes);
-=======
 db.Seats = require("./seats")(sequelize, DataTypes);
->>>>>>> develop
 db.Users = require("./users")(sequelize, DataTypes);
 db.Flights = require("./flights")(sequelize, DataTypes);
 db.Airports = require("./airports")(sequelize, DataTypes);
