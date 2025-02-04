@@ -18,9 +18,10 @@ const cors = require("cors");
 
 // ✅ 모든 요청에서 CORS 허용
 app.use(cors({
-  origin: "http://localhost:5500",  // ✅ 프론트엔드 도메인만 허용
-  methods: ["GET", "POST"],
-  allowedHeaders: ["Content-Type", "Authorization"]
+  origin: process.env.CORS_ORIGIN || "http://localhost:3001",  // ✅ 프론트엔드 도메인만 허용
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
 }));
 
 

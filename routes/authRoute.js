@@ -3,7 +3,10 @@ const passport = require("../passport/passport");
 const { 
   createToken,
   adminRequest, 
-  verifyAdmin
+  verifyAdmin,
+  checkMe,
+  newToken,
+  logout,
  } = require("../controllers/authController");
 const router = express.Router();
 const { verifyToken } = require("../middlewares/jwtMiddleware");
@@ -54,6 +57,12 @@ router.get(
   }),
   createToken,
 );
+
+router.get("/me", verifyToken, checkMe);
+
+router.post("/refresh", newToken);
+
+router.post("/logout", verifyToken, logout);
 
 router.post("/admin", verifyToken, adminRequest);
 
