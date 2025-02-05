@@ -4,6 +4,8 @@ const { StatusCodes } = require("http-status-codes");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const sendEmail = require("../utils/sendEmail");
+const Redis = require("ioredis");
+const redis = new Redis(); // 기본적으로 localhost:6379
 
 
 dotenv.config({ path: "flights-back/config/.env" });
@@ -127,7 +129,6 @@ const checkMe = (req, res) => {
   }
 };
 
-const adminCode = new Map();
 
 const adminRequest = async (req, res) => {
   const userId = req.userId;
@@ -143,11 +144,11 @@ const adminRequest = async (req, res) => {
     }
 
     const verificationCode = Math.floor(100000 + Math.random() * 900000); // 6자리 코드
-    adminCode.set(userId, verificationCode);
+    await redis.setex(`admin_code:${userId}`, 300, verificationCode);
     // 이메일 전송 로직 추가
     await sendEmail(
       email,
-      "Admin Approval Request",
+      `${user.name}'s Admin Approval Request`,
       `Your verification code is ${verificationCode}`
     );
 
@@ -165,9 +166,8 @@ const verifyAdmin = async (req, res) => {
   try {
 
     const user = await User.findByPk(userId);
-    const storedCode = adminCode.get(userId);
-    console.log(storedCode);
-    if (!user || !storedCode || storedCode !== verificationCode) {
+    const storedCode = await redis.get(`admin_code:${userId}`);
+    if (!storedCode || storedCode !== verificationCode) {
       return res.status(StatusCodes.FORBIDDEN).json({ message: "Invalid verification code" });
     }
 
