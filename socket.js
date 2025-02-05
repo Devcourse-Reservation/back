@@ -1,7 +1,7 @@
 const { Server } = require("socket.io");
 const dotenv = require("dotenv");
 
-//dotenv.config({ path: "flights-back/config/.env" });
+dotenv.config({ path: "flights-back/config/.env" });
 
 const initSocket = (server) => {
   const io = new Server(server, {

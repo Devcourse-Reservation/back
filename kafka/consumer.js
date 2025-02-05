@@ -5,7 +5,7 @@ const { updateQueuePositions } = require('../utils/queueUtils');
 
 const kafka = new Kafka({
   clientId: 'reservation-consumer',
-  brokers: [process.env.KAFKA_BROKER]
+  brokers: ['localhost:9092']
 });
 
 const consumer = kafka.consumer({ groupId: 'reservation-group' });

@@ -5,15 +5,10 @@ const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const sendEmail = require("../utils/sendEmail");
 const Redis = require("ioredis");
-const redis = new Redis({
-  host: process.env.REDIS_HOST, // ✅ 컨테이너 이름 사용
-  port: process.env.REDIS_PORT || 6379,
-  password: process.env.REDIS_PASSWORD || null,
-  tls: {}, // Redis가 TLS를 사용한다면 추가
-});
+const redis = new Redis(); // 기본적으로 localhost:6379
 
 
-//dotenv.config({ path: "flights-back/config/.env" });
+dotenv.config({ path: "flights-back/config/.env" });
 
 const findOrCreateUser = async (email, provider, phone_number, name) => {
   const phone = phone_number || "";

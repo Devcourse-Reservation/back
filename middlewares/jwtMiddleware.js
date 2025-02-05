@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const { StatusCodes } = require("http-status-codes");
 
-//dotenv.config({ path: "flights-back/config/.env" });
+dotenv.config({ path: "flights-back/config/.env" });
 
 const verifyToken = async (req, res, next) => {
   const accessToken = req.cookies?.accessToken;

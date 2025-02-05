@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 const { findOrCreateUser } = require("../controllers/authController");
 const axios = require("axios");
 
-//dotenv.config({ path: "flights-back/config/.env" });
+dotenv.config({ path: "flights-back/config/.env" });
 
 const googleStrategy = new GoogleStrategy(
   {
