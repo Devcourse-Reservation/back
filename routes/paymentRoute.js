@@ -9,8 +9,8 @@ const { verifyToken } = require("../middlewares/jwtMiddleware");
 router.use(express.json());
 
 module.exports = (io) => {
-  router.post("/complete", completePayment);
-  router.post("/refund", (req, res) =>
+  router.post("/complete", verifyToken, completePayment);
+  router.post("/refund", verifyToken, (req, res) =>
     refundPayment(req, res, io)
   );
   return router;
