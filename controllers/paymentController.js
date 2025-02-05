@@ -5,7 +5,7 @@ const { StatusCodes } = require("http-status-codes");
 const PortOne = require("@portone/server-sdk")
 const CustomError = require("../utils/customError");
 const dotenv = require("dotenv");
-dotenv.config({ path: "flights-back/config/.env" });
+//dotenv.config({ path: "flights-back/config/.env" });
 const {
     getTicketData,
     updateTicketStatus,

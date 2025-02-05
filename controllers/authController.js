@@ -8,7 +8,7 @@ const Redis = require("ioredis");
 const redis = new Redis(); // 기본적으로 localhost:6379
 
 
-dotenv.config({ path: "flights-back/config/.env" });
+//dotenv.config({ path: "flights-back/config/.env" });
 
 const findOrCreateUser = async (email, provider, phone_number, name) => {
   const phone = phone_number || "";

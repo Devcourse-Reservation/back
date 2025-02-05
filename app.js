@@ -8,7 +8,7 @@ const initSocket = require("./socket");
 //const cors = require("cors");
 
 const dotenv = require("dotenv");
-dotenv.config({ path: path.resolve(__dirname, "../.env") });
+//dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 const app = express();
 const server = http.createServer(app);
