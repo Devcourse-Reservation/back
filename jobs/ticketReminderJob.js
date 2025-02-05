@@ -1,6 +1,7 @@
 const cron = require("node-cron");
 const db = require("../models");
 const sendEmail = require("../utils/sendEmail");
+const { TicketStatus } = require("../common/StatusEnums");
 
 // 스케줄러: 매분 실행
 cron.schedule("* * * * *", async () => {
@@ -8,6 +9,7 @@ cron.schedule("* * * * *", async () => {
     //console.log("Running ticket reminder job...");
 
     const now = new Date();
+    console.log(now);
     const oneHourLater = new Date(now.getTime() + 60 * 60 * 1000);
     // 출발 시간이 1시간 이내인 티켓 조회
     const tickets = await db.Tickets.findAll({
@@ -24,7 +26,7 @@ cron.schedule("* * * * *", async () => {
       ],
       where: {
         "$Flight.departure_time$": [oneHourLater],
-        
+        status: TicketStatus.Confirmed
       },
     });
 

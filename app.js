@@ -5,6 +5,7 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const http = require("http");
 const initSocket = require("./socket");
+require("./jobs/ticketReminderJob"); // 스케줄러 파일 불러오기
 //const cors = require("cors");
 
 const dotenv = require("dotenv");
