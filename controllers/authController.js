@@ -69,7 +69,7 @@ const createToken = (req, res) => {
     secure: false,
   });
 
-  res.redirect(`${process.env.CORS_ORIGIN}/loginsuccess`); // 프론트엔드 홈 화면 URL
+  res.redirect(`${process.env.CORS_ORIGIN}/auth/callback`); // 프론트엔드 홈 화면 URL
 };
 
 const newToken = async (req, res) => {

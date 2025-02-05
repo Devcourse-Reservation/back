@@ -46,8 +46,20 @@ const deleteAirport = async (req, res) => {
     }
 };
 
+const getAirports = async (req, res) => {
+    try {
+        const airports = await Airports.findAll(); // ✅ 모든 공항 정보 조회
+        res.json(airports); // ✅ 조회된 데이터를 JSON 응답으로 반환
+    } catch (error) {
+        console.error('Error fetching airports:', error.message);
+        res.status(500).json({ error: '공항 정보를 가져오는 중 문제가 발생했습니다.' });
+    }
+};
+
+
 module.exports = {
     addAirport,
     updateAirport,
     deleteAirport,
+    getAirports
 };
