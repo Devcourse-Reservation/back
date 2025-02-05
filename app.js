@@ -12,6 +12,16 @@ dotenv.config({ path: path.resolve(__dirname, "../.env") });
 const app = express();
 const server = http.createServer(app);
 const io = initSocket(server);
+const cors = require("cors");
+
+// CORS 설정
+const corsOptions = {
+  origin: "http://localhost:5173",  // 프론트엔드 주소 (React의 경우 Vite 기본 포트)
+  methods: "GET,POST,PUT,DELETE",
+  credentials: true, // 쿠키 허용 (로그인 관련 요청할 때 필요)
+};
+
+app.use(cors(corsOptions));
 
 
 // 라우트 등록
